@@ -93,7 +93,7 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 ::selection{background:var(--ink);color:var(--paper)}
 section,#nosotros,#servicios,#trabajos,#resultados,#packs,#proceso,#testimonios,#contacto,
-.strip,.configurator,.testi,.opt,.stepper,.stepper button,.about-tags span,.wa-btn,.btn{
+.strip,.testi,.about-tags span,.btn,.pack-card,.pack-cta,.testi-nav,.testi-dots button{
   transition:background-color .35s ease,color .35s ease,border-color .35s ease;
 }
 
@@ -401,36 +401,90 @@ body.modal-open{overflow:hidden}
 .res-cell{border-top:2px solid var(--ink);padding-top:1rem}
 @media(max-width:820px){.res-grid{grid-template-columns:1fr 1fr;gap:2rem}}
 
-/* ---------- packs configurator ---------- */
+/* ---------- packs cards ---------- */
 #packs{background:var(--paper)}
-.pack-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:start;margin-top:1rem}
-.pack-intro p{color:var(--ink-soft);max-width:44ch;margin-bottom:1.2rem}
-.pack-note{font-family:var(--font-script);font-size:clamp(2rem,4vw,3.2rem);color:var(--ink);line-height:.9}
-.configurator{border:1px solid var(--ink);border-radius:12px;padding:clamp(1.4rem,3vw,2.4rem);background:var(--paper)}
-.field{margin-bottom:1.6rem}
-.field > label{display:block;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.7rem}
-.opts{display:flex;flex-wrap:wrap;gap:.5rem}
-.opt{
-  border:1px solid var(--beige-2);border-radius:100px;padding:.5rem 1.05rem;font-size:.88rem;
-  cursor:pointer;transition:all .2s ease;user-select:none;background:var(--paper)
+.packs-lead{
+  font-family:var(--font-script);font-size:clamp(1.8rem,3.6vw,2.8rem);
+  color:var(--ink);line-height:1;margin:-1.4rem 0 1rem;
 }
-.opt:hover{border-color:var(--ink)}
-.opt.sel{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.stepper{display:inline-flex;align-items:center;border:1px solid var(--beige-2);border-radius:100px;overflow:hidden}
-.stepper button{width:2.6rem;height:2.6rem;border:none;background:var(--paper);font-size:1.3rem;cursor:pointer;font-family:var(--font-body);color:var(--ink);transition:background .2s}
-.stepper button:hover{background:var(--beige-1)}
-.stepper .val{min-width:3rem;text-align:center;font-family:var(--font-display);font-size:1.5rem}
-.two-step{display:flex;gap:2rem;flex-wrap:wrap}
-.two-step .field{margin-bottom:0}
-.toggle-row{display:flex;gap:.6rem;flex-wrap:wrap}
-.summary{margin-top:.5rem;padding-top:1.4rem;border-top:1px dashed var(--beige-2);font-size:.9rem;color:var(--ink-soft);min-height:2.5rem}
-.summary b{color:var(--ink)}
-.wa-btn{
-  margin-top:1.4rem;width:100%;justify-content:center;background:var(--ink);color:var(--paper);
-  border:1px solid var(--ink);font-size:1rem;padding:1.05rem
+.packs-desc{color:var(--ink-soft);max-width:52ch;margin-bottom:2.4rem;font-size:.95rem}
+.pack-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:clamp(1rem,2vw,1.4rem);align-items:stretch;margin-top:.5rem;
 }
-.wa-btn:hover{background:transparent;color:var(--ink)}
-@media(max-width:820px){.pack-grid{grid-template-columns:1fr}}
+.pack-card{
+  position:relative;display:flex;flex-direction:column;
+  background:var(--paper);border:1px solid var(--beige-2);
+  border-radius:18px;padding:clamp(1.5rem,2.4vw,2rem);
+}
+.pack-card.featured{
+  background:var(--ink);color:var(--paper);border-color:var(--ink);
+  transform:scale(1.03);z-index:1;
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
+}
+.pack-card .pack-badge{
+  position:absolute;top:0;left:50%;transform:translate(-50%,-50%);
+  background:var(--paper);color:var(--ink);
+  font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  padding:.45rem .9rem;border-radius:100px;white-space:nowrap;
+  border:1px solid var(--beige-2);
+}
+.pack-card .pack-label{
+  font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:.7rem;margin-top:.4rem;font-weight:400;
+}
+.pack-card.featured .pack-label{color:rgba(255,255,255,.55)}
+[data-theme="dark"] .pack-card.featured .pack-label{color:rgba(0,0,0,.5)}
+.pack-card .pack-name{
+  font-family:var(--font-display);text-transform:uppercase;font-weight:400;
+  font-size:clamp(1.8rem,3.2vw,2.6rem);line-height:.95;letter-spacing:.03em;
+  margin-bottom:1.3rem;
+}
+.pack-card ul{
+  list-style:none;display:flex;flex-direction:column;gap:.7rem;
+  margin:0 0 1.6rem;flex:1;
+}
+.pack-card li{
+  display:flex;gap:.65rem;align-items:flex-start;
+  font-size:.92rem;line-height:1.4;color:var(--ink-soft);font-weight:400;
+}
+.pack-card.featured li{color:rgba(255,255,255,.82)}
+[data-theme="dark"] .pack-card.featured li{color:rgba(0,0,0,.72)}
+.pack-card li::before{
+  content:"✓";flex:0 0 auto;font-weight:500;color:var(--ink);line-height:1.4;
+}
+.pack-card.featured li::before{color:var(--paper)}
+.pack-card .btn{width:100%;justify-content:center;margin-top:auto;font-weight:500}
+.pack-card.featured .btn.solid{
+  background:var(--paper);color:var(--ink);border-color:var(--paper);
+}
+.pack-card.featured .btn.solid:hover{
+  background:transparent;color:var(--paper);border-color:var(--paper);
+}
+.pack-cta{
+  margin-top:2rem;display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+  background:var(--beige-1);border-radius:16px;
+  padding:clamp(1.3rem,2.5vw,1.8rem) clamp(1.4rem,3vw,2.2rem);
+}
+.pack-cta h3{
+  font-family:var(--font-display);text-transform:uppercase;font-weight:400;
+  font-size:clamp(1.3rem,2.4vw,1.85rem);line-height:1;letter-spacing:.03em;
+  margin-bottom:.45rem;
+}
+.pack-cta p{color:var(--ink-soft);font-size:.92rem;max-width:46ch;margin:0;font-weight:400}
+.pack-cta .btn{flex-shrink:0;font-weight:500}
+.pack-foot{
+  margin-top:1.2rem;text-align:center;font-size:.82rem;color:var(--ink-soft);
+  letter-spacing:.02em;
+}
+@media(max-width:900px){
+  .pack-cards{grid-template-columns:1fr;max-width:420px;margin-inline:auto}
+  .pack-card.featured{transform:none;order:-1}
+  .packs-lead{margin-top:-.6rem}
+  .pack-cta{flex-direction:column;align-items:flex-start}
+  .pack-cta .btn{width:100%;justify-content:center}
+}
 
 /* ---------- proceso ---------- */
 #proceso{background:var(--slate);color:#FFFEFA}
@@ -445,16 +499,51 @@ body.modal-open{overflow:hidden}
 .proc-step .pt{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.4rem,3.4vw,2.6rem);line-height:1}
 .proc-step .pd{font-size:.92rem;color:rgba(255,255,255,.85);margin-top:.3rem;max-width:48ch}
 
-/* ---------- testimonios ---------- */
+/* ---------- testimonios slider ---------- */
 #testimonios{background:var(--beige-1)}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:1rem}
-.testi{background:var(--paper);border-radius:10px;padding:1.8rem;display:flex;flex-direction:column;gap:1.2rem}
-.testi .quote{font-size:1.05rem;line-height:1.55}
-.testi .mark{font-family:var(--font-display);font-size:3rem;line-height:.4;color:var(--beige-2)}
+.testi-slider{position:relative;margin-top:1rem}
+.testi-viewport{overflow:hidden;border-radius:4px}
+.testi-track{
+  display:flex;gap:1.4rem;
+  transition:transform .55s cubic-bezier(.2,.7,.2,1);
+  will-change:transform;
+}
+.testi{
+  flex:0 0 calc((100% - 2.8rem) / 3);
+  background:var(--paper);border-radius:10px;padding:1.8rem;
+  display:flex;flex-direction:column;gap:1.2rem;min-height:100%;
+  box-sizing:border-box;
+}
+.testi .quote{font-size:1.05rem;line-height:1.55;font-weight:400}
+.testi .mark{font-family:var(--font-display);font-size:3rem;line-height:.4;color:var(--beige-2);font-weight:400}
 .testi .who{margin-top:auto;display:flex;flex-direction:column}
-.testi .who b{font-family:var(--font-body);font-weight:700}
-.testi .who span{font-size:.85rem;color:var(--ink-soft)}
-@media(max-width:900px){.testi-grid{grid-template-columns:1fr}}
+.testi .who b{font-family:var(--font-body);font-weight:600}
+.testi .who span{font-size:.85rem;color:var(--ink-soft);font-weight:400}
+.testi-controls{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;margin-top:1.4rem;flex-wrap:wrap;
+}
+.testi-dots{display:flex;gap:.45rem;align-items:center}
+.testi-dots button{
+  width:.55rem;height:.55rem;border-radius:100px;border:none;
+  background:var(--beige-2);padding:0;cursor:pointer;
+  transition:width .25s ease,background .25s ease;
+}
+.testi-dots button[aria-current="true"]{width:1.5rem;background:var(--ink)}
+.testi-navs{display:flex;gap:.5rem}
+.testi-nav{
+  width:2.7rem;height:2.7rem;border-radius:50%;
+  border:1px solid var(--ink);background:transparent;color:var(--ink);
+  display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1.15rem;line-height:1;
+  transition:background .25s ease,color .25s ease;
+}
+.testi-nav:hover{background:var(--ink);color:var(--paper)}
+.testi-nav:disabled{opacity:.35;cursor:default;pointer-events:none}
+@media(max-width:900px){
+  .testi{flex-basis:100%}
+  .testi-track{gap:1rem}
+}
 
 /* ---------- contacto ---------- */
 #contacto{background:var(--ink);color:var(--paper);text-align:center;padding-bottom:3rem}
@@ -495,6 +584,31 @@ body.modal-open{overflow:hidden}
 [data-lang="es"] .m-lang .lang-es,
 [data-lang="en"] .m-lang .lang-en{opacity:1}
 
+/* ---------- floating WhatsApp ---------- */
+.wa-float{
+  position:fixed;right:max(1.1rem, env(safe-area-inset-right));
+  bottom:max(1.1rem, env(safe-area-inset-bottom));
+  z-index:160;
+  width:3.5rem;height:3.5rem;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ink);color:var(--paper);
+  border:1px solid var(--ink);
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  transition:transform .25s ease,box-shadow .25s ease,opacity .25s ease,background-color .35s ease,color .35s ease,border-color .35s ease;
+}
+.wa-float svg{width:1.55rem;height:1.55rem}
+.wa-float:hover{
+  background:var(--paper);color:var(--ink);
+  transform:translateY(-3px) scale(1.04);
+  box-shadow:0 12px 28px rgba(0,0,0,.22);
+}
+.wa-float:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+body.modal-open .wa-float{opacity:0;pointer-events:none}
+@media (max-width:820px){
+  .wa-float{width:3.25rem;height:3.25rem}
+  .wa-float svg{width:1.4rem;height:1.4rem}
+}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .reveal{opacity:1;transform:none}
@@ -508,6 +622,11 @@ body.modal-open{overflow:hidden}
 
 <div class="cursor-dot" id="cursor"></div>
 <div class="progress" id="progress"></div>
+
+<a class="wa-float" href="https://wa.me/5491159639468" target="_blank" rel="noopener" data-cursor
+   aria-label="WhatsApp · 11 5963-9468" title="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 
 <!-- NAV -->
 <header class="nav">
@@ -671,57 +790,66 @@ body.modal-open{overflow:hidden}
       <span class="sec-num">04</span>
       <h2 class="sec-title" data-i18n-html="packs.title">Packs a <span class="script">tu medida</span></h2>
     </div>
-    <div class="pack-grid">
-      <div class="pack-intro reveal">
-        <p data-i18n="packs.p1">No trabajamos con planes cerrados. Armamos cada pack según tu necesidad, la red social, la cantidad de contenido y si querés grabación presencial o pauta.</p>
-        <p data-i18n="packs.p2">Configurá tu pack acá al lado y en un toque nos llega tu consulta por WhatsApp con todo listo para cotizarte.</p>
-        <div class="pack-note" data-i18n-html="packs.note">Cercano,<br>detallista<br>y flexible.</div>
-      </div>
+    <p class="packs-lead reveal" data-i18n="packs.lead">Cercano, detallista y flexible.</p>
+    <p class="packs-desc reveal" data-i18n="packs.desc">Planes orientativos para que veas por dónde arrancar — siempre los ajustamos 100% a tu marca y tu objetivo.</p>
 
-      <div class="configurator reveal">
-        <div class="field">
-          <label data-i18n="packs.red">¿Qué red social?</label>
-          <div class="opts" data-group="red" data-multi="true">
-            <div class="opt sel" data-val="Instagram">Instagram</div>
-            <div class="opt" data-val="TikTok">TikTok</div>
-            <div class="opt" data-val="LinkedIn">LinkedIn</div>
-            <div class="opt" data-val="Facebook">Facebook</div>
-          </div>
-        </div>
+    <div class="pack-cards">
+      <article class="pack-card reveal">
+        <div class="pack-label" data-i18n="packs.e.label">Para ordenar tus redes</div>
+        <h3 class="pack-name" data-i18n="packs.e.name">Esencial</h3>
+        <ul>
+          <li data-i18n="packs.e.f1">Gestión de 1 red social</li>
+          <li data-i18n="packs.e.f2">8 posteos + historias al mes</li>
+          <li data-i18n="packs.e.f3">Diseño de placas alineado a tu marca</li>
+          <li data-i18n="packs.e.f4">Calendario y redacción de contenido</li>
+        </ul>
+        <a href="#" class="btn solid pack-wa" data-pack="esencial" data-cursor target="_blank" rel="noopener">
+          <span data-i18n="packs.cta">Lo quiero</span> <span class="arrow">→</span>
+        </a>
+      </article>
 
-        <div class="two-step">
-          <div class="field">
-            <label data-i18n="packs.posts">Posts por mes</label>
-            <div class="stepper" data-step="posts">
-              <button data-dir="-1" aria-label="menos" data-i18n-aria="packs.less">−</button>
-              <span class="val">8</span>
-              <button data-dir="1" aria-label="más" data-i18n-aria="packs.more">+</button>
-            </div>
-          </div>
-          <div class="field">
-            <label data-i18n="packs.stories">Historias por mes</label>
-            <div class="stepper" data-step="historias">
-              <button data-dir="-1" aria-label="menos" data-i18n-aria="packs.less">−</button>
-              <span class="val">12</span>
-              <button data-dir="1" aria-label="más" data-i18n-aria="packs.more">+</button>
-            </div>
-          </div>
-        </div>
+      <article class="pack-card featured reveal">
+        <div class="pack-badge" data-i18n="packs.c.badge">★ El más elegido</div>
+        <div class="pack-label" data-i18n="packs.c.label">Para crecer y ganar comunidad</div>
+        <h3 class="pack-name" data-i18n="packs.c.name">Crecimiento</h3>
+        <ul>
+          <li data-i18n="packs.c.f1">Gestión de hasta 2 redes</li>
+          <li data-i18n="packs.c.f2">Posteos + reels + historias</li>
+          <li data-i18n="packs.c.f3">Grabación de contenido (fotos &amp; videos)</li>
+          <li data-i18n="packs.c.f4">Estrategia y calendario de contenido</li>
+          <li data-i18n="packs.c.f5">Reporte y análisis mensual</li>
+        </ul>
+        <a href="#" class="btn solid pack-wa" data-pack="crecimiento" data-cursor target="_blank" rel="noopener">
+          <span data-i18n="packs.cta">Lo quiero</span> <span class="arrow">→</span>
+        </a>
+      </article>
 
-        <div class="field">
-          <label data-i18n="packs.extras">Sumar a tu pack</label>
-          <div class="opts toggle-row" data-group="extra" data-multi="true">
-            <div class="opt" data-val="onsite" data-i18n="packs.extra.onsite">Grabación presencial</div>
-            <div class="opt" data-val="ads" data-i18n="packs.extra.ads">Pauta publicitaria</div>
-            <div class="opt" data-val="design" data-i18n="packs.extra.design">Diseño de placas</div>
-            <div class="opt" data-val="brand" data-i18n="packs.extra.brand">Manual de marca</div>
-          </div>
-        </div>
-
-        <div class="summary" id="summary"></div>
-        <a href="#" class="btn wa-btn" id="waBtn" data-cursor><span data-i18n="packs.wa">Enviar consulta por WhatsApp</span> <span class="arrow">→</span></a>
-      </div>
+      <article class="pack-card reveal">
+        <div class="pack-label" data-i18n="packs.f.label">Tu marca en piloto automático</div>
+        <h3 class="pack-name" data-i18n="packs.f.name">Full 360</h3>
+        <ul>
+          <li data-i18n="packs.f.f1">Todo lo del pack Crecimiento</li>
+          <li data-i18n="packs.f.f2">Pauta publicitaria</li>
+          <li data-i18n="packs.f.f3">Grabación de contenido ampliada</li>
+          <li data-i18n="packs.f.f4">Manual de marca</li>
+          <li data-i18n="packs.f.f5">Atención prioritaria</li>
+        </ul>
+        <a href="#" class="btn solid pack-wa" data-pack="full" data-cursor target="_blank" rel="noopener">
+          <span data-i18n="packs.cta">Lo quiero</span> <span class="arrow">→</span>
+        </a>
+      </article>
     </div>
+
+    <div class="pack-cta reveal">
+      <div>
+        <h3 data-i18n="packs.helpTitle">¿No sabés cuál elegir?</h3>
+        <p data-i18n="packs.helpText">Contanos qué necesitás y te armamos un pack a tu medida, sin vueltas.</p>
+      </div>
+      <a href="#" class="btn solid pack-wa" data-pack="custom" data-cursor target="_blank" rel="noopener">
+        <span data-i18n="packs.helpCta">Escribinos por WhatsApp</span> <span class="arrow">→</span>
+      </a>
+    </div>
+    <p class="pack-foot reveal" data-i18n="packs.foot">Respondemos el mismo día  ·  Sin compromiso  ·  Presupuesto a medida</p>
   </div>
 </section>
 
@@ -743,7 +871,18 @@ body.modal-open{overflow:hidden}
       <span class="sec-num">06</span>
       <h2 class="sec-title" data-i18n-html="reviews.title">Reseñas de <span class="script">clientes</span></h2>
     </div>
-    <div class="testi-grid" id="testiGrid"></div>
+    <div class="testi-slider reveal" id="testiSlider">
+      <div class="testi-viewport">
+        <div class="testi-track" id="testiTrack"></div>
+      </div>
+      <div class="testi-controls">
+        <div class="testi-dots" id="testiDots" role="tablist" aria-label="Reseñas"></div>
+        <div class="testi-navs">
+          <button type="button" class="testi-nav" id="testiPrev" data-cursor aria-label="Anterior" data-i18n-aria="reviews.prev">←</button>
+          <button type="button" class="testi-nav" id="testiNext" data-cursor aria-label="Siguiente" data-i18n-aria="reviews.next">→</button>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -860,29 +999,38 @@ body.modal-open{overflow:hidden}
       'results.l3': 'plataformas: IG, Facebook, LinkedIn y TikTok',
       'results.l4': 'packs personalizados a cada marca',
       'packs.title': 'Packs a <span class="script">tu medida</span>',
-      'packs.p1': 'No trabajamos con planes cerrados. Armamos cada pack según tu necesidad, la red social, la cantidad de contenido y si querés grabación presencial o pauta.',
-      'packs.p2': 'Configurá tu pack acá al lado y en un toque nos llega tu consulta por WhatsApp con todo listo para cotizarte.',
-      'packs.note': 'Cercano,<br>detallista<br>y flexible.',
-      'packs.red': '¿Qué red social?',
-      'packs.posts': 'Posts por mes',
-      'packs.stories': 'Historias por mes',
-      'packs.extras': 'Sumar a tu pack',
-      'packs.extra.onsite': 'Grabación presencial',
-      'packs.extra.ads': 'Pauta publicitaria',
-      'packs.extra.design': 'Diseño de placas',
-      'packs.extra.brand': 'Manual de marca',
-      'packs.extraFull.onsite': 'Grabación de contenido presencial',
-      'packs.extraFull.ads': 'Pauta publicitaria',
-      'packs.extraFull.design': 'Diseño de placas',
-      'packs.extraFull.brand': 'Manual de marca',
-      'packs.less': 'menos',
-      'packs.more': 'más',
-      'packs.wa': 'Enviar consulta por WhatsApp',
-      'packs.summary': 'Tu pack: <b>{redes}</b> · <b>{posts}</b> posts y <b>{historias}</b> historias/mes · {extras}.',
-      'packs.noExtras': 'sin extras',
-      'packs.waMsg': '¡Hola Trini! Quiero armar un pack para mi marca 👇\n\n• Redes: {redes}\n• Posts por mes: {posts}\n• Historias por mes: {historias}{extras}\n\n¿Me pasás una propuesta? ¡Gracias!',
-      'packs.waExtras': '\n• Extras: {extras}',
-      'packs.toDefine': 'a definir',
+      'packs.lead': 'Cercano, detallista y flexible.',
+      'packs.desc': 'Planes orientativos para que veas por dónde arrancar — siempre los ajustamos 100% a tu marca y tu objetivo.',
+      'packs.cta': 'Lo quiero',
+      'packs.e.label': 'Para ordenar tus redes',
+      'packs.e.name': 'Esencial',
+      'packs.e.f1': 'Gestión de 1 red social',
+      'packs.e.f2': '8 posteos + historias al mes',
+      'packs.e.f3': 'Diseño de placas alineado a tu marca',
+      'packs.e.f4': 'Calendario y redacción de contenido',
+      'packs.e.wa': '¡Hola Trini! Me interesa el pack Esencial. ¿Me pasás más info?',
+      'packs.c.badge': '★ El más elegido',
+      'packs.c.label': 'Para crecer y ganar comunidad',
+      'packs.c.name': 'Crecimiento',
+      'packs.c.f1': 'Gestión de hasta 2 redes',
+      'packs.c.f2': 'Posteos + reels + historias',
+      'packs.c.f3': 'Grabación de contenido (fotos & videos)',
+      'packs.c.f4': 'Estrategia y calendario de contenido',
+      'packs.c.f5': 'Reporte y análisis mensual',
+      'packs.c.wa': '¡Hola Trini! Me interesa el pack Crecimiento. ¿Me pasás más info?',
+      'packs.f.label': 'Tu marca en piloto automático',
+      'packs.f.name': 'Full 360',
+      'packs.f.f1': 'Todo lo del pack Crecimiento',
+      'packs.f.f2': 'Pauta publicitaria',
+      'packs.f.f3': 'Grabación de contenido ampliada',
+      'packs.f.f4': 'Manual de marca',
+      'packs.f.f5': 'Atención prioritaria',
+      'packs.f.wa': '¡Hola Trini! Me interesa el pack Full 360. ¿Me pasás más info?',
+      'packs.helpTitle': '¿No sabés cuál elegir?',
+      'packs.helpText': 'Contanos qué necesitás y te armamos un pack a tu medida, sin vueltas.',
+      'packs.helpCta': 'Escribinos por WhatsApp',
+      'packs.custom.wa': '¡Hola Trini! No sé qué pack elegir. ¿Me armás uno a medida según lo que necesito?',
+      'packs.foot': 'Respondemos el mismo día  ·  Sin compromiso  ·  Presupuesto a medida',
       'process.title': 'Nuestro proceso',
       process: [
         ['Charla inicial gratuita','Nos conocemos y entendemos tu marca y tus objetivos.'],
@@ -892,10 +1040,20 @@ body.modal-open{overflow:hidden}
         ['Aplicación de servicios','Ejecutamos, medimos y optimizamos mes a mes.']
       ],
       'reviews.title': 'Reseñas de <span class="script">clientes</span>',
+      'reviews.prev': 'Anterior',
+      'reviews.next': 'Siguiente',
+      'reviews.dots': 'Reseñas',
+      'reviews.dot': 'Ir a grupo de reseñas {n}',
       reviews: [
         ['Delegué mis redes y por fin pude enfocarme en mi negocio. El cambio en el contenido se notó desde el primer mes.','Dueña de marca','Rubro gastronomía'],
         ['Súper organizada y atenta a cada detalle. Entendió la estética de mi marca al instante.','Emprendedora','Deco & interiores'],
-        ['Trato cercano y resultados concretos. Crecimos en seguidores y, lo importante, en consultas.','Cliente','Estética & belleza']
+        ['Trato cercano y resultados concretos. Crecimos en seguidores y, lo importante, en consultas.','Cliente','Estética & belleza'],
+        ['El feed pasó a verse mucho más profesional y coherente. Empezamos a recibir más DMs de compra.','Fundadora','Moda'],
+        ['Transmitió exactamente la sensación del lugar. Las consultas y reservas desde Instagram subieron.','Dueña','Turismo & hospedaje'],
+        ['Contenido claro y constante. Mejoró mi marca personal y las consultas por propiedades.','Agente inmobiliaria','Bienes raíces'],
+        ['Los resultados se ven reales y eso genera confianza. La agenda se llenó mes a mes.','Dueña de salón','Peluquería & belleza'],
+        ['Entendió el tono de la marca: cálido, cuidado y sin perder identidad. El engagement creció solo.','Dueña','Café & brunch'],
+        ['Flexible, cercana y siempre con ideas nuevas. Se nota que le importa tanto como a vos.','Emprendedora','Lifestyle']
       ],
       'contact.title': 'Trabajemos<br><span class="script">juntos.</span>',
       'contact.foot': 'TT Mkting — Agencia de marketing digital · Buenos Aires, Argentina'
@@ -963,29 +1121,38 @@ body.modal-open{overflow:hidden}
       'results.l3': 'platforms: IG, Facebook, LinkedIn and TikTok',
       'results.l4': 'custom packs tailored to each brand',
       'packs.title': 'Packs made <span class="script">for you</span>',
-      'packs.p1': "We don't work with fixed plans. We build each pack around your needs, the platform, the amount of content, and whether you want on-site shooting or ads.",
-      'packs.p2': 'Configure your pack here and your WhatsApp inquiry reaches us ready to quote.',
-      'packs.note': 'Close,<br>detail-oriented<br>and flexible.',
-      'packs.red': 'Which social network?',
-      'packs.posts': 'Posts per month',
-      'packs.stories': 'Stories per month',
-      'packs.extras': 'Add to your pack',
-      'packs.extra.onsite': 'On-site shooting',
-      'packs.extra.ads': 'Paid advertising',
-      'packs.extra.design': 'Post design',
-      'packs.extra.brand': 'Brand guidelines',
-      'packs.extraFull.onsite': 'On-site content shooting',
-      'packs.extraFull.ads': 'Paid advertising',
-      'packs.extraFull.design': 'Post design',
-      'packs.extraFull.brand': 'Brand guidelines',
-      'packs.less': 'less',
-      'packs.more': 'more',
-      'packs.wa': 'Send inquiry on WhatsApp',
-      'packs.summary': 'Your pack: <b>{redes}</b> · <b>{posts}</b> posts and <b>{historias}</b> stories/month · {extras}.',
-      'packs.noExtras': 'no extras',
-      'packs.waMsg': "Hi Trini! I'd like to build a pack for my brand 👇\n\n• Networks: {redes}\n• Posts per month: {posts}\n• Stories per month: {historias}{extras}\n\nCould you send me a proposal? Thanks!",
-      'packs.waExtras': '\n• Extras: {extras}',
-      'packs.toDefine': 'to define',
+      'packs.lead': 'Close, detail-oriented and flexible.',
+      'packs.desc': 'Indicative plans to help you get started — we always tailor them 100% to your brand and goals.',
+      'packs.cta': 'I want it',
+      'packs.e.label': 'To get your socials in order',
+      'packs.e.name': 'Essential',
+      'packs.e.f1': 'Management of 1 social network',
+      'packs.e.f2': '8 posts + stories per month',
+      'packs.e.f3': 'Post design aligned to your brand',
+      'packs.e.f4': 'Content calendar and copywriting',
+      'packs.e.wa': 'Hi Trini! I\'m interested in the Essential pack. Can you send me more info?',
+      'packs.c.badge': '★ Most chosen',
+      'packs.c.label': 'To grow and build community',
+      'packs.c.name': 'Growth',
+      'packs.c.f1': 'Management of up to 2 networks',
+      'packs.c.f2': 'Posts + reels + stories',
+      'packs.c.f3': 'Content shooting (photos & videos)',
+      'packs.c.f4': 'Strategy and content calendar',
+      'packs.c.f5': 'Monthly report and analysis',
+      'packs.c.wa': 'Hi Trini! I\'m interested in the Growth pack. Can you send me more info?',
+      'packs.f.label': 'Your brand on autopilot',
+      'packs.f.name': 'Full 360',
+      'packs.f.f1': 'Everything in the Growth pack',
+      'packs.f.f2': 'Paid advertising',
+      'packs.f.f3': 'Extended content shooting',
+      'packs.f.f4': 'Brand guidelines',
+      'packs.f.f5': 'Priority support',
+      'packs.f.wa': 'Hi Trini! I\'m interested in the Full 360 pack. Can you send me more info?',
+      'packs.helpTitle': 'Not sure which to choose?',
+      'packs.helpText': 'Tell us what you need and we\'ll build a custom pack for you — no fuss.',
+      'packs.helpCta': 'Message us on WhatsApp',
+      'packs.custom.wa': 'Hi Trini! I\'m not sure which pack to choose. Can you build a custom one for what I need?',
+      'packs.foot': 'Same-day reply  ·  No commitment  ·  Custom quote',
       'process.title': 'Our process',
       process: [
         ['Free intro call','We get to know each other and understand your brand and goals.'],
@@ -995,10 +1162,20 @@ body.modal-open{overflow:hidden}
         ['Service delivery','We execute, measure and optimize every month.']
       ],
       'reviews.title': 'Client <span class="script">reviews</span>',
+      'reviews.prev': 'Previous',
+      'reviews.next': 'Next',
+      'reviews.dots': 'Reviews',
+      'reviews.dot': 'Go to review group {n}',
       reviews: [
         ['I handed over my socials and finally focused on my business. The content shift showed from month one.','Brand owner','Food & hospitality'],
         ['Super organized and detail-oriented. She got my brand aesthetic instantly.','Entrepreneur','Decor & interiors'],
-        ['Close support and concrete results. We grew followers and, more importantly, inquiries.','Client','Beauty & aesthetics']
+        ['Close support and concrete results. We grew followers and, more importantly, inquiries.','Client','Beauty & aesthetics'],
+        ['The feed looks far more professional and consistent. We started getting more purchase DMs.','Founder','Fashion'],
+        ['She captured exactly how the place feels. Inquiries and bookings from Instagram went up.','Owner','Tourism & lodging'],
+        ['Clear, consistent content. My personal brand improved and so did property inquiries.','Real estate agent','Real estate'],
+        ['Results look real and that builds trust. The appointment book filled up month after month.','Salon owner','Hair & beauty'],
+        ['She nailed the brand tone: warm, careful, still true to us. Engagement grew on its own.','Owner','Café & brunch'],
+        ['Flexible, close and always bringing fresh ideas. You can tell she cares as much as you do.','Entrepreneur','Lifestyle']
       ],
       'contact.title': "Let's work<br><span class=\"script\">together.</span>",
       'contact.foot': 'TT Mkting — Digital marketing agency · Buenos Aires, Argentina'
@@ -1065,17 +1242,80 @@ body.modal-open{overflow:hidden}
     });
   }
 
+  var testiPage = 0;
+  var testiTimer = null;
+
+  function testiPerView(){
+    return window.matchMedia('(max-width:900px)').matches ? 1 : 3;
+  }
+
+  function stopTestiAuto(){
+    if(testiTimer){ clearInterval(testiTimer); testiTimer = null; }
+  }
+
+  function startTestiAuto(){
+    stopTestiAuto();
+    if(reduce) return;
+    var track = document.getElementById('testiTrack');
+    if(!track || track.children.length <= testiPerView()) return;
+    testiTimer = setInterval(function(){ goTestiPage(testiPage + 1); }, 5500);
+  }
+
+  function goTestiPage(page){
+    var track = document.getElementById('testiTrack');
+    var dots = document.getElementById('testiDots');
+    var prev = document.getElementById('testiPrev');
+    var next = document.getElementById('testiNext');
+    if(!track) return;
+    var total = track.children.length;
+    var per = testiPerView();
+    var maxPage = Math.max(0, Math.ceil(total / per) - 1);
+    testiPage = ((page % (maxPage + 1)) + (maxPage + 1)) % (maxPage + 1);
+    var first = track.children[0];
+    if(!first) return;
+    var step = first.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).gap) || 0);
+    track.style.transform = 'translateX(' + (-testiPage * per * step) + 'px)';
+    if(dots){
+      dots.querySelectorAll('button').forEach(function(b, i){
+        b.setAttribute('aria-current', i === testiPage ? 'true' : 'false');
+      });
+    }
+    if(prev) prev.disabled = maxPage === 0;
+    if(next) next.disabled = maxPage === 0;
+  }
+
   function renderReviews(){
-    var tg = document.getElementById('testiGrid');
-    if(!tg) return;
+    var track = document.getElementById('testiTrack');
+    var dots = document.getElementById('testiDots');
+    if(!track) return;
     var testi = t('reviews');
-    tg.innerHTML = '';
+    track.innerHTML = '';
     testi.forEach(function(item){
-      var d = document.createElement('div');
-      d.className = 'testi reveal';
-      d.innerHTML = '<div class="mark">“</div><p class="quote">'+item[0]+'</p><div class="who"><b>'+item[1]+'</b><span>'+item[2]+'</span></div>';
-      tg.appendChild(d);
+      var d = document.createElement('article');
+      d.className = 'testi';
+      d.innerHTML = '<div class="mark" aria-hidden="true">“</div><p class="quote">'+item[0]+'</p><div class="who"><b>'+item[1]+'</b><span>'+item[2]+'</span></div>';
+      track.appendChild(d);
     });
+    if(dots){
+      dots.innerHTML = '';
+      dots.setAttribute('aria-label', t('reviews.dots'));
+      var per = testiPerView();
+      var pages = Math.max(1, Math.ceil(testi.length / per));
+      for(var i = 0; i < pages; i++){
+        (function(idx){
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('aria-label', fill(t('reviews.dot'), { n: String(idx + 1) }));
+          b.addEventListener('click', function(){
+            goTestiPage(idx);
+            startTestiAuto();
+          });
+          dots.appendChild(b);
+        })(i);
+      }
+    }
+    testiPage = 0;
+    requestAnimationFrame(function(){ goTestiPage(0); startTestiAuto(); });
   }
 
   function syncThemeUI(){
@@ -1134,7 +1374,7 @@ body.modal-open{overflow:hidden}
     renderServices();
     renderProcess();
     renderReviews();
-    if(typeof updateSummary === 'function') updateSummary();
+    if(typeof updatePackLinks === 'function') updatePackLinks();
     if(!opts.skipObserve) observeReveals();
     document.documentElement.setAttribute('data-i18n-ready', '1');
   }
@@ -1510,10 +1750,10 @@ body.modal-open{overflow:hidden}
       requestAnimationFrame(loop);
     })();
     document.addEventListener('mouseover',function(e){
-      if(e.target.closest('[data-cursor],a,button,.opt,.card,.serv-item')) cur.classList.add('is-active');
+      if(e.target.closest('[data-cursor],a,button,.card,.serv-item')) cur.classList.add('is-active');
     });
     document.addEventListener('mouseout',function(e){
-      if(e.target.closest('[data-cursor],a,button,.opt,.card,.serv-item')) cur.classList.remove('is-active');
+      if(e.target.closest('[data-cursor],a,button,.card,.serv-item')) cur.classList.remove('is-active');
     });
   }
 
@@ -1523,79 +1763,48 @@ body.modal-open{overflow:hidden}
   document.getElementById('mClose').addEventListener('click',function(){ mo.classList.remove('open'); });
   mo.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ mo.classList.remove('open'); }); });
 
-  /* ---------- packs configurator ---------- */
-  var state = { red:['Instagram'], posts:8, historias:12, extra:[] };
-  var updateSummary;
-
-  document.querySelectorAll('.opts').forEach(function(group){
-    var key = group.dataset.group;
-    group.querySelectorAll('.opt').forEach(function(opt){
-      opt.addEventListener('click',function(){
-        var val = opt.dataset.val;
-        var arr = state[key];
-        if(opt.classList.contains('sel')){
-          opt.classList.remove('sel');
-          state[key] = arr.filter(function(v){ return v!==val; });
-        } else {
-          opt.classList.add('sel');
-          arr.push(val);
-        }
-        updateSummary();
-      });
-    });
-  });
-
-  document.querySelectorAll('.stepper').forEach(function(st){
-    var key = st.dataset.step;
-    var valEl = st.querySelector('.val');
-    st.querySelectorAll('button').forEach(function(b){
-      b.addEventListener('click',function(){
-        var dir = +b.dataset.dir;
-        state[key] = Math.max(0, state[key] + dir*(key==='historias'?2:1));
-        valEl.textContent = state[key];
-        updateSummary();
-      });
-    });
-  });
-
-  function extraLabel(key, full){
-    return t((full ? 'packs.extraFull.' : 'packs.extra.') + key);
-  }
-
-  function buildMessage(){
-    var redes = state.red.length ? state.red.join(', ') : t('packs.toDefine');
-    var extrasLine = '';
-    if(state.extra.length){
-      extrasLine = fill(t('packs.waExtras'), {
-        extras: state.extra.map(function(k){ return extraLabel(k, true); }).join(', ')
-      });
+  /* ---------- reviews slider controls ---------- */
+  (function initTestiControls(){
+    var prev = document.getElementById('testiPrev');
+    var next = document.getElementById('testiNext');
+    var slider = document.getElementById('testiSlider');
+    if(prev) prev.addEventListener('click', function(){ goTestiPage(testiPage - 1); startTestiAuto(); });
+    if(next) next.addEventListener('click', function(){ goTestiPage(testiPage + 1); startTestiAuto(); });
+    if(slider){
+      slider.addEventListener('mouseenter', stopTestiAuto);
+      slider.addEventListener('mouseleave', startTestiAuto);
+      var startX = 0;
+      slider.addEventListener('touchstart', function(e){
+        startX = e.changedTouches[0].clientX;
+        stopTestiAuto();
+      }, {passive:true});
+      slider.addEventListener('touchend', function(e){
+        var dx = e.changedTouches[0].clientX - startX;
+        if(Math.abs(dx) > 40) goTestiPage(testiPage + (dx < 0 ? 1 : -1));
+        startTestiAuto();
+      }, {passive:true});
     }
-    return fill(t('packs.waMsg'), {
-      redes: redes,
-      posts: state.posts,
-      historias: state.historias,
-      extras: extrasLine
+    var resizeTimer;
+    window.addEventListener('resize', function(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function(){ renderReviews(); }, 150);
+    });
+  })();
+
+  /* ---------- packs WhatsApp links ---------- */
+  var packWaKeys = {
+    esencial: 'packs.e.wa',
+    crecimiento: 'packs.c.wa',
+    full: 'packs.f.wa',
+    custom: 'packs.custom.wa'
+  };
+  function updatePackLinks(){
+    document.querySelectorAll('.pack-wa').forEach(function(a){
+      var key = packWaKeys[a.getAttribute('data-pack')];
+      if(!key) return;
+      a.href = 'https://wa.me/5491159639468?text=' + encodeURIComponent(t(key));
     });
   }
-
-  updateSummary = function(){
-    var s = document.getElementById('summary');
-    var redes = state.red.length ? state.red.join(', ') : '—';
-    var extras = state.extra.length
-      ? state.extra.map(function(k){ return extraLabel(k, false); }).join(' · ')
-      : t('packs.noExtras');
-    s.innerHTML = fill(t('packs.summary'), {
-      redes: redes,
-      posts: state.posts,
-      historias: state.historias,
-      extras: extras
-    });
-    var wa = document.getElementById('waBtn');
-    wa.href = 'https://wa.me/5491159639468?text=' + encodeURIComponent(buildMessage());
-  };
-
-  document.getElementById('waBtn').setAttribute('target','_blank');
-  document.getElementById('waBtn').setAttribute('rel','noopener');
 
   /* ---------- boot i18n (after dynamic lists helpers exist) ---------- */
   applyLang(currentLang(), { skipObserve: true });
