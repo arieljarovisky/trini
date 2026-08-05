@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TT Mkting — Agencia de marketing digital</title>
+<meta name="description" content="Gestionamos y hacemos crecer marcas en redes. Estrategia, contenido y gestión de redes sociales. Cercano, detallista y flexible.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Arimo:ital,wght@0,400;0,500;0,700;1,400&family=Sacramento&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFEFA;
+  --beige-1:#D1CBC5;
+  --beige-2:#BDB6A8;
+  --slate:#9BA1A4;
+  --ink-soft:#595B5B;
+  --ink:#000000;
+
+  --font-display:'Anton',Impact,sans-serif;
+  --font-body:'Arimo',Helvetica,Arial,sans-serif;
+  --font-script:'Sacramento',cursive;
+
+  --pad:clamp(1.25rem,5vw,6rem);
+  --maxw:1400px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:clamp(1rem,1.05vw,1.15rem);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+::selection{background:var(--ink);color:var(--paper)}
+
+/* ---------- custom cursor dot (the "." motif) ---------- */
+.cursor-dot{
+  position:fixed;top:0;left:0;width:12px;height:12px;border-radius:50%;
+  background:var(--ink);pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .25s ease,height .25s ease,background .25s ease,opacity .25s ease;
+  mix-blend-mode:difference;opacity:0;
+}
+.cursor-dot.is-active{width:64px;height:64px;background:var(--paper)}
+@media (pointer:coarse){.cursor-dot{display:none}}
+
+/* ---------- scroll progress ---------- */
+.progress{
+  position:fixed;top:0;left:0;height:3px;width:0%;
+  background:var(--ink);z-index:200;transition:width .1s linear;
+}
+
+/* ---------- nav ---------- */
+header.nav{
+  position:fixed;top:0;left:0;width:100%;z-index:150;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem var(--pad);
+  mix-blend-mode:difference;color:var(--paper);
+}
+.nav .brand{font-family:var(--font-display);font-size:1.9rem;letter-spacing:-.02em;line-height:1}
+.nav .brand .dot{color:var(--slate)}
+.nav-links{display:flex;gap:2rem;align-items:center;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}
+.nav-links a{position:relative;padding:.2rem 0}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:currentColor;transition:width .3s ease}
+.nav-links a:hover::after{width:100%}
+.nav-links .pill{border:1px solid currentColor;border-radius:100px;padding:.5rem 1.1rem}
+.nav-links .pill:hover{background:var(--paper);color:var(--ink);mix-blend-mode:normal}
+.menu-btn{display:none;font-family:var(--font-display);font-size:1.1rem;letter-spacing:.1em;background:none;border:none;color:inherit;cursor:pointer}
+@media(max-width:860px){
+  .nav-links{display:none}
+  .menu-btn{display:block}
+}
+
+/* ---------- hero ---------- */
+.hero{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding:7rem var(--pad) 3rem;position:relative;
+}
+.hero .eyebrow{
+  display:flex;align-items:center;gap:.8rem;font-size:.8rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:1.6rem;
+}
+.hero .eyebrow .line{height:1px;width:clamp(30px,6vw,90px);background:var(--ink-soft)}
+.hero h1{
+  font-family:var(--font-display);font-weight:400;
+  font-size:clamp(3.4rem,15.5vw,15rem);line-height:.86;letter-spacing:-.02em;
+  text-transform:uppercase;
+}
+.hero h1 .word{display:block;overflow:hidden}
+.hero h1 .word span{display:block;transform:translateY(110%)}
+.hero h1 .script{
+  font-family:var(--font-script);text-transform:none;color:var(--ink-soft);
+  font-size:clamp(2.6rem,9vw,9rem);line-height:.8;font-weight:400;letter-spacing:0;
+  margin-left:.1em;
+}
+.hero .sub{
+  margin-top:2.2rem;max-width:44ch;color:var(--ink-soft);font-size:clamp(1rem,1.3vw,1.25rem);
+  opacity:0;transform:translateY(20px);transition:all .8s ease .9s;
+}
+.hero .actions{
+  margin-top:2.4rem;display:flex;gap:1rem;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);transition:all .8s ease 1.05s;
+}
+.hero.loaded .sub,.hero.loaded .actions{opacity:1;transform:translateY(0)}
+.btn{
+  display:inline-flex;align-items:center;gap:.6rem;font-family:var(--font-body);
+  font-weight:700;font-size:.9rem;letter-spacing:.04em;
+  padding:.95rem 1.8rem;border-radius:100px;border:1px solid var(--ink);
+  transition:all .3s ease;cursor:pointer;
+}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.btn .arrow{transition:transform .3s ease}
+.btn:hover .arrow{transform:translateX(4px)}
+.scroll-cue{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);
+}
+.scroll-cue .ball{width:8px;height:8px;border-radius:50%;background:var(--ink);animation:cue 1.6s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(10px);opacity:.3}}
+
+/* ---------- services marquee strip ---------- */
+.strip{
+  border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+  overflow:hidden;white-space:nowrap;background:var(--ink);color:var(--paper);
+  padding:.9rem 0;
+}
+.strip .track{display:inline-flex;gap:2.5rem;animation:marq 28s linear infinite;font-family:var(--font-display);font-size:1.5rem;letter-spacing:.02em;text-transform:uppercase}
+.strip .track span{display:inline-flex;align-items:center;gap:2.5rem}
+.strip .track .d{color:var(--slate)}
+.strip:hover .track{animation-play-state:paused}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ---------- generic section ---------- */
+section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
+.wrap{max-width:var(--maxw);margin:0 auto}
+.sec-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:3rem}
+.sec-num{font-family:var(--font-body);font-weight:700;font-size:.85rem;letter-spacing:.1em;color:var(--slate)}
+.sec-title{font-family:var(--font-display);font-weight:400;text-transform:uppercase;line-height:.9;letter-spacing:-.01em;font-size:clamp(2.4rem,7vw,6rem)}
+.sec-title .script{font-family:var(--font-script);text-transform:none;color:var(--ink-soft);font-size:clamp(2rem,5vw,4.2rem)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- about ---------- */
+#nosotros{background:var(--paper)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:start}
+.about-lead{font-family:var(--font-display);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:-.01em;font-size:clamp(1.8rem,3.4vw,3.3rem)}
+.about-lead em{font-family:var(--font-script);text-transform:none;font-style:normal;color:var(--slate)}
+.about-body p{color:var(--ink-soft);margin-bottom:1.2rem;max-width:52ch}
+.about-tags{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.8rem}
+.about-tags span{border:1px solid var(--beige-2);border-radius:100px;padding:.4rem 1rem;font-size:.8rem;letter-spacing:.04em;color:var(--ink-soft)}
+@media(max-width:820px){.about-grid{grid-template-columns:1fr}}
+
+/* ---------- services list ---------- */
+#servicios{background:var(--beige-1)}
+.serv-list{border-top:1px solid rgba(0,0,0,.25)}
+.serv-item{
+  display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;align-items:center;
+  padding:1.6rem 0;border-bottom:1px solid rgba(0,0,0,.25);cursor:default;
+  position:relative;transition:padding .35s ease;
+}
+.serv-item .idx{font-family:var(--font-body);font-weight:700;font-size:.85rem;color:var(--ink-soft);width:2.5rem}
+.serv-item .name{font-family:var(--font-display);font-weight:400;text-transform:uppercase;font-size:clamp(1.4rem,3.4vw,2.6rem);line-height:1;letter-spacing:-.01em;transition:transform .35s ease}
+.serv-item .desc{font-size:.9rem;color:var(--ink-soft);max-width:34ch;justify-self:end;text-align:right;opacity:.65;transition:opacity .35s ease}
+.serv-item:hover{padding-left:1.2rem}
+.serv-item:hover .name{transform:translateX(.3rem)}
+.serv-item:hover .desc{opacity:1}
+.serv-item::before{content:"";position:absolute;left:0;top:0;height:100%;width:0;background:var(--ink);opacity:.06;transition:width .4s ease;z-index:-1}
+.serv-item:hover::before{width:100%}
+@media(max-width:760px){
+  .serv-item{grid-template-columns:auto 1fr}
+  .serv-item .desc{display:none}
+}
+
+/* ---------- horizontal works gallery ---------- */
+#trabajos{padding:0;background:var(--ink);color:var(--paper)}
+.hwrap{height:400vh;position:relative}
+.hsticky{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.h-head{padding:2rem var(--pad) .5rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
+.h-head .sec-title{color:var(--paper)}
+.h-head .sec-title .script{color:var(--slate)}
+.h-head .hint{font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);display:flex;align-items:center;gap:.6rem}
+.h-head .hint .arr{animation:cue2 1.6s ease-in-out infinite}
+@keyframes cue2{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.htrack{display:flex;gap:clamp(1.2rem,2.5vw,2.4rem);padding:1.5rem var(--pad);will-change:transform}
+.card{
+  flex:0 0 clamp(260px,32vw,440px);height:56vh;border:1px solid rgba(255,255,255,.18);
+  border-radius:6px;padding:1.8rem;display:flex;flex-direction:column;justify-content:space-between;
+  background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,0));
+  transition:background .4s ease,border-color .4s ease;
+}
+.card:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.card .cnum{font-size:.8rem;letter-spacing:.1em;color:var(--slate)}
+.card:hover .cnum{color:var(--ink-soft)}
+.card .cname{font-family:var(--font-display);font-weight:400;text-transform:uppercase;font-size:clamp(2rem,4.5vw,3.4rem);line-height:.9;letter-spacing:-.01em}
+.card .crubro{font-size:.95rem;color:var(--slate);margin-top:.4rem}
+.card:hover .crubro{color:var(--ink-soft)}
+.card .ctag{align-self:flex-start;border:1px solid currentColor;border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;letter-spacing:.06em;display:inline-flex;gap:.5rem;align-items:center}
+
+/* ---------- results / counters ---------- */
+#resultados{background:var(--beige-2)}
+.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:1rem}
+.res-cell .num{font-family:var(--font-display);font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:.9;letter-spacing:-.02em}
+.res-cell .lab{font-size:.9rem;color:var(--ink-soft);margin-top:.4rem;max-width:22ch}
+.res-cell{border-top:2px solid var(--ink);padding-top:1rem}
+@media(max-width:820px){.res-grid{grid-template-columns:1fr 1fr;gap:2rem}}
+
+/* ---------- packs configurator ---------- */
+#packs{background:var(--paper)}
+.pack-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:start;margin-top:1rem}
+.pack-intro p{color:var(--ink-soft);max-width:44ch;margin-bottom:1.2rem}
+.pack-note{font-family:var(--font-script);font-size:clamp(2rem,4vw,3.2rem);color:var(--ink);line-height:.9}
+.configurator{border:1px solid var(--ink);border-radius:12px;padding:clamp(1.4rem,3vw,2.4rem);background:var(--paper)}
+.field{margin-bottom:1.6rem}
+.field > label{display:block;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.7rem}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem}
+.opt{
+  border:1px solid var(--beige-2);border-radius:100px;padding:.5rem 1.05rem;font-size:.88rem;
+  cursor:pointer;transition:all .2s ease;user-select:none;background:var(--paper)
+}
+.opt:hover{border-color:var(--ink)}
+.opt.sel{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--beige-2);border-radius:100px;overflow:hidden}
+.stepper button{width:2.6rem;height:2.6rem;border:none;background:var(--paper);font-size:1.3rem;cursor:pointer;font-family:var(--font-body);color:var(--ink);transition:background .2s}
+.stepper button:hover{background:var(--beige-1)}
+.stepper .val{min-width:3rem;text-align:center;font-family:var(--font-display);font-size:1.5rem}
+.two-step{display:flex;gap:2rem;flex-wrap:wrap}
+.two-step .field{margin-bottom:0}
+.toggle-row{display:flex;gap:.6rem;flex-wrap:wrap}
+.summary{margin-top:.5rem;padding-top:1.4rem;border-top:1px dashed var(--beige-2);font-size:.9rem;color:var(--ink-soft);min-height:2.5rem}
+.summary b{color:var(--ink)}
+.wa-btn{
+  margin-top:1.4rem;width:100%;justify-content:center;background:var(--ink);color:var(--paper);
+  border:1px solid var(--ink);font-size:1rem;padding:1.05rem
+}
+.wa-btn:hover{background:transparent;color:var(--ink)}
+@media(max-width:820px){.pack-grid{grid-template-columns:1fr}}
+
+/* ---------- proceso ---------- */
+#proceso{background:var(--slate);color:var(--paper)}
+.proc-list{margin-top:1rem}
+.proc-step{
+  display:grid;grid-template-columns:auto 1fr;gap:clamp(1rem,4vw,3rem);align-items:baseline;
+  padding:1.8rem 0;border-top:1px solid rgba(255,255,255,.3)
+}
+.proc-step:last-child{border-bottom:1px solid rgba(255,255,255,.3)}
+.proc-step .pn{font-family:var(--font-display);font-size:clamp(2.5rem,7vw,5.5rem);line-height:.8;letter-spacing:-.02em}
+.proc-step .pt{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.4rem,3.4vw,2.6rem);line-height:1}
+.proc-step .pd{font-size:.92rem;color:rgba(255,255,255,.8);margin-top:.3rem;max-width:48ch}
+
+/* ---------- testimonios ---------- */
+#testimonios{background:var(--beige-1)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:1rem}
+.testi{background:var(--paper);border-radius:10px;padding:1.8rem;display:flex;flex-direction:column;gap:1.2rem}
+.testi .quote{font-size:1.05rem;line-height:1.55}
+.testi .mark{font-family:var(--font-display);font-size:3rem;line-height:.4;color:var(--beige-2)}
+.testi .who{margin-top:auto;display:flex;flex-direction:column}
+.testi .who b{font-family:var(--font-body);font-weight:700}
+.testi .who span{font-size:.85rem;color:var(--ink-soft)}
+@media(max-width:900px){.testi-grid{grid-template-columns:1fr}}
+
+/* ---------- contacto ---------- */
+#contacto{background:var(--ink);color:var(--paper);text-align:center;padding-bottom:3rem}
+.cta-big{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(3rem,16vw,15rem);line-height:.85;letter-spacing:-.02em}
+.cta-big .script{font-family:var(--font-script);text-transform:none;color:var(--slate);font-size:clamp(2.6rem,11vw,10rem)}
+.cta-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem}
+.cta-links a{border:1px solid rgba(255,255,255,.4);border-radius:100px;padding:.9rem 1.7rem;font-size:.95rem;transition:all .3s ease}
+.cta-links a:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.foot{margin-top:5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.8rem;color:var(--slate);border-top:1px solid rgba(255,255,255,.2);padding-top:1.5rem;text-align:left}
+.foot .fbrand{font-family:var(--font-display);font-size:1.4rem;color:var(--paper)}
+
+/* mobile menu overlay */
+.m-overlay{position:fixed;inset:0;background:var(--ink);color:var(--paper);z-index:180;display:flex;flex-direction:column;justify-content:center;padding:var(--pad);gap:1rem;transform:translateY(-100%);transition:transform .5s cubic-bezier(.7,0,.2,1)}
+.m-overlay.open{transform:translateY(0)}
+.m-overlay a{font-family:var(--font-display);text-transform:uppercase;font-size:2.4rem;line-height:1.1}
+.m-close{position:absolute;top:1.2rem;right:var(--pad);font-family:var(--font-display);font-size:1.4rem;background:none;border:none;color:var(--paper);cursor:pointer}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+  .hero h1 .word span{transform:none}
+  .hero .sub,.hero .actions{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor"></div>
+<div class="progress" id="progress"></div>
+
+<!-- NAV -->
+<header class="nav">
+  <a href="#top" class="brand">tt<span class="dot">.</span></a>
+  <nav class="nav-links">
+    <a href="#nosotros">Nosotros</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#trabajos">Trabajos</a>
+    <a href="#packs">Packs</a>
+    <a href="#contacto" class="pill">Trabajemos juntos</a>
+  </nav>
+  <button class="menu-btn" id="menuBtn">Menú</button>
+</header>
+
+<div class="m-overlay" id="mOverlay">
+  <button class="m-close" id="mClose">Cerrar ✕</button>
+  <a href="#nosotros">Nosotros</a>
+  <a href="#servicios">Servicios</a>
+  <a href="#trabajos">Trabajos</a>
+  <a href="#resultados">Resultados</a>
+  <a href="#packs">Packs</a>
+  <a href="#proceso">Proceso</a>
+  <a href="#testimonios">Reseñas</a>
+  <a href="#contacto">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="eyebrow"><span class="line"></span> TT Mkting — Agencia de marketing digital</div>
+  <h1>
+    <span class="word"><span>Hacemos</span></span>
+    <span class="word"><span>crecer</span></span>
+    <span class="word"><span>marcas</span></span>
+    <span class="script">en redes.</span>
+  </h1>
+  <p class="sub">Estrategia, contenido y gestión de redes sociales para emprendedores, pymes y empresas. Cercano, detallista y flexible.</p>
+  <div class="actions">
+    <a href="#packs" class="btn solid" data-cursor>Armá tu pack <span class="arrow">→</span></a>
+    <a href="#trabajos" class="btn ghost" data-cursor>Ver trabajos</a>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="ball"></span></div>
+</section>
+
+<!-- SERVICES MARQUEE -->
+<div class="strip" aria-hidden="true">
+  <div class="track">
+    <span>Placas gráficas <b class="d">•</b> Copywriting <b class="d">•</b> Manual de marca <b class="d">•</b> Foto & video <b class="d">•</b> Edición <b class="d">•</b> Gestión de redes <b class="d">•</b> Estrategia <b class="d">•</b> Pauta publicitaria <b class="d">•</b> Reportes <b class="d">•</b> </span>
+    <span>Placas gráficas <b class="d">•</b> Copywriting <b class="d">•</b> Manual de marca <b class="d">•</b> Foto & video <b class="d">•</b> Edición <b class="d">•</b> Gestión de redes <b class="d">•</b> Estrategia <b class="d">•</b> Pauta publicitaria <b class="d">•</b> Reportes <b class="d">•</b> </span>
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<section id="nosotros">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">Sobre <span class="script">nosotros</span></h2>
+    </div>
+    <div class="about-grid">
+      <p class="about-lead reveal">Hace más de 3 años ayudamos a marcas a <em>conectar</em> con su audiencia y potenciar su presencia digital.</p>
+      <div class="about-body reveal">
+        <p>Soy Trinidad Tognini, estudiante de Comunicación y Marketing Digital en ISEC, con formación en community management, social media, IA, paid media y gestión de redes.</p>
+        <p>Desarrollamos estrategias de contenido que conectan de verdad y hacen crecer la presencia digital de emprendedores, marcas, pymes y empresas. Trabajamos principalmente en Instagram, Facebook, LinkedIn y TikTok.</p>
+        <div class="about-tags">
+          <span>Instagram</span><span>Facebook</span><span>LinkedIn</span><span>TikTok</span><span>Community management</span><span>Paid media</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">Servicios</h2>
+    </div>
+    <div class="serv-list" id="servList"></div>
+  </div>
+</section>
+
+<!-- TRABAJOS (horizontal scroll) -->
+<section id="trabajos">
+  <div class="hwrap" id="hwrap">
+    <div class="hsticky">
+      <div class="h-head reveal">
+        <h2 class="sec-title">Trabajos <span class="script">realizados</span></h2>
+        <span class="hint">Seguí bajando <span class="arr">→</span></span>
+      </div>
+      <div class="htrack" id="htrack"></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTADOS -->
+<section id="resultados">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">Resultados</h2>
+    </div>
+    <div class="res-grid">
+      <div class="res-cell reveal"><div class="num" data-count="40" data-suffix="+">0</div><div class="lab">marcas acompañadas en su crecimiento</div></div>
+      <div class="res-cell reveal"><div class="num" data-count="3" data-suffix="+">0</div><div class="lab">años gestionando y creciendo redes</div></div>
+      <div class="res-cell reveal"><div class="num" data-count="4" data-suffix="">0</div><div class="lab">plataformas: IG, Facebook, LinkedIn y TikTok</div></div>
+      <div class="res-cell reveal"><div class="num" data-count="100" data-suffix="%">0</div><div class="lab">packs personalizados a cada marca</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKS -->
+<section id="packs">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title">Packs a <span class="script">tu medida</span></h2>
+    </div>
+    <div class="pack-grid">
+      <div class="pack-intro reveal">
+        <p>No trabajamos con planes cerrados. Armamos cada pack según tu necesidad, la red social, la cantidad de contenido y si querés grabación presencial o pauta.</p>
+        <p>Configurá tu pack acá al lado y en un toque nos llega tu consulta por WhatsApp con todo listo para cotizarte.</p>
+        <div class="pack-note">Cercano,<br>detallista<br>y flexible.</div>
+      </div>
+
+      <div class="configurator reveal">
+        <div class="field">
+          <label>¿Qué red social?</label>
+          <div class="opts" data-group="red" data-multi="true">
+            <div class="opt sel" data-val="Instagram">Instagram</div>
+            <div class="opt" data-val="TikTok">TikTok</div>
+            <div class="opt" data-val="LinkedIn">LinkedIn</div>
+            <div class="opt" data-val="Facebook">Facebook</div>
+          </div>
+        </div>
+
+        <div class="two-step">
+          <div class="field">
+            <label>Posts por mes</label>
+            <div class="stepper" data-step="posts">
+              <button data-dir="-1" aria-label="menos">−</button>
+              <span class="val">8</span>
+              <button data-dir="1" aria-label="más">+</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Historias por mes</label>
+            <div class="stepper" data-step="historias">
+              <button data-dir="-1" aria-label="menos">−</button>
+              <span class="val">12</span>
+              <button data-dir="1" aria-label="más">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Sumar a tu pack</label>
+          <div class="opts toggle-row" data-group="extra" data-multi="true">
+            <div class="opt" data-val="Grabación de contenido presencial">Grabación presencial</div>
+            <div class="opt" data-val="Pauta publicitaria">Pauta publicitaria</div>
+            <div class="opt" data-val="Diseño de placas">Diseño de placas</div>
+            <div class="opt" data-val="Manual de marca">Manual de marca</div>
+          </div>
+        </div>
+
+        <div class="summary" id="summary"></div>
+        <a href="#" class="btn wa-btn" id="waBtn" data-cursor>Enviar consulta por WhatsApp <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">05</span>
+      <h2 class="sec-title" style="color:var(--paper)">Nuestro proceso</h2>
+    </div>
+    <div class="proc-list" id="procList"></div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">06</span>
+      <h2 class="sec-title">Reseñas de <span class="script">clientes</span></h2>
+    </div>
+    <div class="testi-grid" id="testiGrid"></div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="wrap reveal">
+    <div class="cta-big">Trabajemos<br><span class="script">juntos.</span></div>
+    <div class="cta-links">
+      <a href="https://wa.me/5491159639468" target="_blank" rel="noopener" data-cursor>WhatsApp · 11 5963-9468</a>
+      <a href="https://instagram.com/trinitognini" target="_blank" rel="noopener" data-cursor>Instagram · @trinitognini</a>
+      <a href="mailto:trinitogniniwork@gmail.com" data-cursor>trinitogniniwork@gmail.com</a>
+    </div>
+    <div class="foot">
+      <span class="fbrand">tt<span style="color:var(--slate)">.</span></span>
+      <span>TT Mkting — Agencia de marketing digital · Buenos Aires, Argentina</span>
+      <span>© <span id="year"></span> Trinidad Tognini</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- year ---------- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- hero load animation ---------- */
+  window.addEventListener('load', function(){
+    var hero = document.querySelector('.hero');
+    var words = hero.querySelectorAll('h1 .word span');
+    words.forEach(function(w,i){
+      w.style.transition = 'transform .9s cubic-bezier(.2,.8,.2,1)';
+      w.style.transitionDelay = (0.15 + i*0.12) + 's';
+      requestAnimationFrame(function(){ w.style.transform = 'translateY(0)'; });
+    });
+    setTimeout(function(){ hero.classList.add('loaded'); }, 120);
+  });
+
+  /* ---------- render services ---------- */
+  var services = [
+    ['Gestión de redes sociales','Community management integral de tu cuenta'],
+    ['Estrategia de contenido','Un plan pensado para tus objetivos'],
+    ['Calendario y redacción','Planificación y copywriting mes a mes'],
+    ['Diseño de placas gráficas','Piezas alineadas a tu identidad'],
+    ['Grabación de contenido','Fotos y videos, presencial o remoto'],
+    ['Edición y composición de video','Reels y videos que enganchan'],
+    ['Copywriting','Textos que comunican y venden'],
+    ['Manual de marca','Tu identidad ordenada y consistente'],
+    ['Pauta publicitaria','Campañas para llegar más lejos'],
+    ['Catálogo por WhatsApp','Vendé directo desde el chat'],
+    ['Página web y portfolio','Tu presencia digital, completa'],
+    ['Reportes y análisis mensual','Medimos lo que hacemos crecer']
+  ];
+  var sl = document.getElementById('servList');
+  services.forEach(function(s,i){
+    var n = String(i+1).padStart(2,'0');
+    var d = document.createElement('div');
+    d.className = 'serv-item reveal';
+    d.innerHTML = '<span class="idx">'+n+'</span><span class="name">'+s[0]+'</span><span class="desc">'+s[1]+'</span>';
+    sl.appendChild(d);
+  });
+
+  /* ---------- render works ---------- */
+  var works = [
+    ['Gluck','Recoleta · Gastronomía'],
+    ['Carmela','Café & brunch'],
+    ['Las Uñas de Fío','Belleza & estética'],
+    ['Pau Martinez','Deco & interiores'],
+    ['Sky Pack','Packaging & e-commerce'],
+    ['Remax Río','Inmobiliaria'],
+    ['Cabañas Antilhue','Turismo & cabañas'],
+    ['Cortes Argentina','Gastronomía'],
+    ['Amaisa','Moda & tienda online'],
+    ['Estancia Vigil','Campo & experiencias'],
+    ['Predent','Salud & odontología'],
+    ['Ezeangel','Peluquería & estilismo']
+  ];
+  var ht = document.getElementById('htrack');
+  works.forEach(function(w,i){
+    var n = String(i+1).padStart(2,'0');
+    var c = document.createElement('a');
+    c.className = 'card';
+    c.href = 'https://instagram.com/trinitognini';
+    c.target = '_blank'; c.rel = 'noopener';
+    c.setAttribute('data-cursor','');
+    c.innerHTML = '<span class="cnum">Caso '+n+'</span>'+
+                  '<div><div class="cname">'+w[0]+'</div><div class="crubro">'+w[1]+'</div></div>'+
+                  '<span class="ctag">Ver en Instagram ↗</span>';
+    ht.appendChild(c);
+  });
+
+  /* ---------- render proceso ---------- */
+  var proc = [
+    ['Charla inicial gratuita','Nos conocemos y entendemos tu marca y tus objetivos.'],
+    ['Envío de propuesta','Te armamos un pack a medida con todo lo que necesitás.'],
+    ['Videollamada en conjunto','Ajustamos detalles y alineamos expectativas.'],
+    ['Comienzo del trabajo','Arrancamos con el plan definido y los tiempos claros.'],
+    ['Aplicación de servicios','Ejecutamos, medimos y optimizamos mes a mes.']
+  ];
+  var pl = document.getElementById('procList');
+  proc.forEach(function(p,i){
+    var s = document.createElement('div');
+    s.className = 'proc-step reveal';
+    s.innerHTML = '<span class="pn">0'+(i+1)+'</span><div><div class="pt">'+p[0]+'</div><div class="pd">'+p[1]+'</div></div>';
+    pl.appendChild(s);
+  });
+
+  /* ---------- render testimonios (EDITAR: reemplazar por reseñas reales) ---------- */
+  var testi = [
+    ['Delegué mis redes y por fin pude enfocarme en mi negocio. El cambio en el contenido se notó desde el primer mes.','Dueña de marca','Rubro gastronomía'],
+    ['Súper organizada y atenta a cada detalle. Entendió la estética de mi marca al instante.','Emprendedora','Deco & interiores'],
+    ['Trato cercano y resultados concretos. Crecimos en seguidores y, lo importante, en consultas.','Cliente','Estética & belleza']
+  ];
+  var tg = document.getElementById('testiGrid');
+  testi.forEach(function(t){
+    var d = document.createElement('div');
+    d.className = 'testi reveal';
+    d.innerHTML = '<div class="mark">“</div><p class="quote">'+t[0]+'</p><div class="who"><b>'+t[1]+'</b><span>'+t[2]+'</span></div>';
+    tg.appendChild(d);
+  });
+
+  /* ---------- reveal on scroll ---------- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  /* ---------- counters ---------- */
+  var counted = new WeakSet();
+  var cio = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting || counted.has(e.target)) return;
+      counted.add(e.target);
+      var el = e.target, target = +el.dataset.count, suf = el.dataset.suffix||'', start = null, dur = 1400;
+      if(reduce){ el.textContent = target+suf; return; }
+      function tick(ts){
+        if(!start) start = ts;
+        var p = Math.min((ts-start)/dur,1);
+        var ease = 1 - Math.pow(1-p,3);
+        el.textContent = Math.round(target*ease)+suf;
+        if(p<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, {threshold:0.5});
+  document.querySelectorAll('[data-count]').forEach(function(el){ cio.observe(el); });
+
+  /* ---------- horizontal scroll gallery ---------- */
+  var hwrap = document.getElementById('hwrap');
+  var htrack = document.getElementById('htrack');
+  function horiz(){
+    if(!hwrap) return;
+    var rect = hwrap.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var total = hwrap.offsetHeight - vh;
+    var progressed = Math.min(Math.max(-rect.top,0), total);
+    var p = total>0 ? progressed/total : 0;
+    var maxX = htrack.scrollWidth - window.innerWidth;
+    if(maxX < 0) maxX = 0;
+    htrack.style.transform = 'translateX(' + (-p*maxX) + 'px)';
+  }
+
+  /* ---------- progress bar + rAF loop ---------- */
+  var prog = document.getElementById('progress');
+  var ticking = false;
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      var st = window.scrollY || document.documentElement.scrollTop;
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      prog.style.width = (h>0 ? (st/h*100) : 0) + '%';
+      if(!reduce) horiz();
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---------- custom cursor ---------- */
+  if(window.matchMedia('(pointer:fine)').matches && !reduce){
+    var cur = document.getElementById('cursor');
+    var cx=0,cy=0,tx=0,ty=0;
+    document.addEventListener('mousemove',function(e){ tx=e.clientX; ty=e.clientY; cur.style.opacity=1; });
+    (function loop(){
+      cx += (tx-cx)*0.2; cy += (ty-cy)*0.2;
+      cur.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+      requestAnimationFrame(loop);
+    })();
+    document.addEventListener('mouseover',function(e){
+      if(e.target.closest('[data-cursor],a,button,.opt,.card,.serv-item')) cur.classList.add('is-active');
+    });
+    document.addEventListener('mouseout',function(e){
+      if(e.target.closest('[data-cursor],a,button,.opt,.card,.serv-item')) cur.classList.remove('is-active');
+    });
+  }
+
+  /* ---------- mobile menu ---------- */
+  var mo = document.getElementById('mOverlay');
+  document.getElementById('menuBtn').addEventListener('click',function(){ mo.classList.add('open'); });
+  document.getElementById('mClose').addEventListener('click',function(){ mo.classList.remove('open'); });
+  mo.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ mo.classList.remove('open'); }); });
+
+  /* ---------- packs configurator ---------- */
+  var state = { red:['Instagram'], posts:8, historias:12, extra:[] };
+
+  document.querySelectorAll('.opts').forEach(function(group){
+    var key = group.dataset.group;
+    group.querySelectorAll('.opt').forEach(function(opt){
+      opt.addEventListener('click',function(){
+        var val = opt.dataset.val;
+        var arr = state[key];
+        if(opt.classList.contains('sel')){
+          opt.classList.remove('sel');
+          state[key] = arr.filter(function(v){ return v!==val; });
+        } else {
+          opt.classList.add('sel');
+          arr.push(val);
+        }
+        updateSummary();
+      });
+    });
+  });
+
+  document.querySelectorAll('.stepper').forEach(function(st){
+    var key = st.dataset.step;
+    var valEl = st.querySelector('.val');
+    st.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){
+        var dir = +b.dataset.dir;
+        state[key] = Math.max(0, state[key] + dir*(key==='historias'?2:1));
+        valEl.textContent = state[key];
+        updateSummary();
+      });
+    });
+  });
+
+  function buildMessage(){
+    var redes = state.red.length ? state.red.join(', ') : 'a definir';
+    var msg = '¡Hola Trini! Quiero armar un pack para mi marca 👇\n\n';
+    msg += '• Redes: ' + redes + '\n';
+    msg += '• Posts por mes: ' + state.posts + '\n';
+    msg += '• Historias por mes: ' + state.historias + '\n';
+    if(state.extra.length) msg += '• Extras: ' + state.extra.join(', ') + '\n';
+    msg += '\n¿Me pasás una propuesta? ¡Gracias!';
+    return msg;
+  }
+
+  function updateSummary(){
+    var s = document.getElementById('summary');
+    var redes = state.red.length ? state.red.join(', ') : '—';
+    var extras = state.extra.length ? state.extra.join(' · ') : 'sin extras';
+    s.innerHTML = 'Tu pack: <b>'+redes+'</b> · <b>'+state.posts+'</b> posts y <b>'+state.historias+'</b> historias/mes · '+extras+'.';
+    var wa = document.getElementById('waBtn');
+    wa.href = 'https://wa.me/5491159639468?text=' + encodeURIComponent(buildMessage());
+  }
+
+  document.getElementById('waBtn').setAttribute('target','_blank');
+  document.getElementById('waBtn').setAttribute('rel','noopener');
+  updateSummary();
+
+})();
+</script>
+</body>
+</html>
