@@ -172,9 +172,15 @@ header.nav.is-scrolled{
 
 /* ---------- hero ---------- */
 .hero{
-  min-height:100svh;display:flex;flex-direction:column;justify-content:center;
-  padding:7rem var(--pad) 3rem;position:relative;
+  min-height:100svh;display:flex;align-items:center;
+  padding:7rem var(--pad) 4.5rem;position:relative;
 }
+.hero-grid{
+  width:100%;max-width:var(--maxw);margin:0 auto;
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(1.5rem,4vw,4rem);align-items:center;
+}
+.hero-copy{min-width:0}
 .hero .eyebrow{
   display:flex;align-items:center;gap:.8rem;font-size:.8rem;letter-spacing:.22em;
   text-transform:uppercase;color:var(--ink-soft);margin-bottom:1.6rem;
@@ -182,14 +188,14 @@ header.nav.is-scrolled{
 .hero .eyebrow .line{height:1px;width:clamp(30px,6vw,90px);background:var(--ink-soft)}
 .hero h1{
   font-family:var(--font-display);font-weight:400;
-  font-size:clamp(3.4rem,15.5vw,15rem);line-height:.86;letter-spacing:-.02em;
+  font-size:clamp(2.8rem,9.5vw,9.5rem);line-height:1.02;letter-spacing:-.02em;
   text-transform:uppercase;
 }
 .hero h1 .word{display:block;overflow:hidden}
 .hero h1 .word span{display:block;transform:translateY(110%)}
 .hero h1 .script{
   font-family:var(--font-script);text-transform:none;color:var(--ink-soft);
-  font-size:clamp(2.6rem,9vw,9rem);line-height:.8;font-weight:400;letter-spacing:0;
+  font-size:clamp(2.2rem,6.5vw,6.5rem);line-height:.8;font-weight:400;letter-spacing:0;
   margin-left:.1em;
 }
 .hero .sub{
@@ -201,6 +207,15 @@ header.nav.is-scrolled{
   opacity:0;transform:translateY(20px);transition:all .8s ease 1.05s;
 }
 .hero.loaded .sub,.hero.loaded .actions{opacity:1;transform:translateY(0)}
+.hero-visual{
+  position:relative;justify-self:center;width:min(100%,380px);
+  opacity:0;transform:translateY(24px);transition:opacity .9s ease .35s,transform .9s cubic-bezier(.2,.8,.2,1) .35s;
+}
+.hero.loaded .hero-visual{opacity:1;transform:translateY(0)}
+.hero-visual img{
+  width:100%;height:auto;display:block;margin:0 auto;
+  -webkit-user-drag:none;user-select:none;pointer-events:none;
+}
 .btn{
   display:inline-flex;align-items:center;gap:.6rem;font-family:var(--font-body);
   font-weight:700;font-size:.9rem;letter-spacing:.04em;
@@ -219,6 +234,14 @@ header.nav.is-scrolled{
 }
 .scroll-cue .ball{width:8px;height:8px;border-radius:50%;background:var(--ink);animation:cue 1.6s ease-in-out infinite}
 @keyframes cue{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(10px);opacity:.3}}
+@media(max-width:900px){
+  .hero{padding-top:6.2rem;align-items:flex-start}
+  .hero-grid{grid-template-columns:1fr;gap:1.6rem}
+  .hero-visual{justify-self:center;width:min(68vw,300px);margin-top:.2rem}
+  .hero h1{font-size:clamp(2.6rem,14vw,5.5rem)}
+  .hero h1 .script{font-size:clamp(2rem,10vw,3.6rem)}
+  .scroll-cue{display:none}
+}
 
 /* ---------- services marquee strip ---------- */
 .strip{
@@ -293,13 +316,80 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
   position:relative;overflow:hidden;border-radius:16px;display:block;
   border:1px solid var(--card-border);background:var(--card-bg);
   transition:border-color .4s ease,transform .5s cubic-bezier(.2,.7,.2,1);
+  padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-align:left;
+  -webkit-appearance:none;appearance:none;
 }
 .card img{width:100%;height:100%;object-fit:cover;display:block;
-  transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+  transition:transform .7s cubic-bezier(.2,.7,.2,1);pointer-events:none}
 .card:hover{border-color:var(--card-border-hover);transform:translateY(-6px)}
 .card:hover img{transform:scale(1.03)}
+.card:focus-visible{outline:2px solid var(--paper);outline-offset:3px}
 @media(max-width:820px){
   .card{height:auto;width:min(80vw,400px);flex:0 0 auto}
+}
+
+/* ---------- project modal ---------- */
+.work-modal{
+  position:fixed;inset:0;z-index:220;display:flex;align-items:center;justify-content:center;
+  padding:max(1rem,env(safe-area-inset-top)) var(--pad) max(1rem,env(safe-area-inset-bottom));
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .35s ease,visibility .35s ease;
+}
+.work-modal.open{opacity:1;visibility:visible;pointer-events:auto}
+.work-modal-backdrop{
+  position:absolute;inset:0;background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:none;padding:0;cursor:pointer;
+}
+.work-modal-panel{
+  position:relative;z-index:1;width:min(920px,100%);
+  max-height:min(90svh,880px);overflow:auto;
+  display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  gap:clamp(1.2rem,3vw,2.2rem);align-items:stretch;
+  background:var(--paper);color:var(--ink);
+  border:1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  border-radius:18px;padding:clamp(1.2rem,3vw,2rem);
+  transform:translateY(18px) scale(.985);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),background-color .35s ease,color .35s ease,border-color .35s ease;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+.work-modal.open .work-modal-panel{transform:translateY(0) scale(1)}
+.work-modal-media{
+  border-radius:14px;overflow:hidden;background:var(--card-bg);
+  border:1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  aspect-ratio:1055/1491;max-height:min(68svh,620px);
+}
+.work-modal-media img{width:100%;height:100%;object-fit:cover;display:block}
+.work-modal-body{display:flex;flex-direction:column;min-width:0;padding:.2rem 0}
+.work-modal-tag{
+  font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.9rem;
+}
+.work-modal-title{
+  font-family:var(--font-display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(2.2rem,5.5vw,4.2rem);line-height:.92;letter-spacing:-.02em;margin-bottom:1.1rem;
+}
+.work-modal-desc{color:var(--ink-soft);font-size:clamp(1rem,1.15vw,1.12rem);line-height:1.65;max-width:42ch}
+.work-modal-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:auto;padding-top:1.8rem}
+.work-modal-links a{
+  display:inline-flex;align-items:center;gap:.45rem;
+  border:1px solid var(--ink);border-radius:100px;padding:.72rem 1.25rem;
+  font-size:.88rem;letter-spacing:.04em;transition:background .25s ease,color .25s ease;
+}
+.work-modal-links a:hover{background:var(--ink);color:var(--paper)}
+.work-modal-links a[hidden]{display:none!important}
+.work-modal-close{
+  position:absolute;top:.85rem;right:.85rem;width:2.6rem;height:2.6rem;border-radius:50%;
+  border:1px solid color-mix(in srgb, var(--ink) 22%, transparent);background:var(--paper);color:var(--ink);
+  font-family:var(--font-display);font-size:1.35rem;line-height:1;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background .25s ease,color .25s ease,border-color .25s ease;
+}
+.work-modal-close:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+body.modal-open{overflow:hidden}
+@media(max-width:760px){
+  .work-modal-panel{grid-template-columns:1fr;max-height:min(92svh,900px);padding:1.1rem}
+  .work-modal-media{max-height:42svh;aspect-ratio:4/3}
+  .work-modal-links{padding-top:1.3rem}
 }
 
 /* ---------- results / counters ---------- */
@@ -370,7 +460,13 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 .cta-big{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(3rem,16vw,15rem);line-height:.85;letter-spacing:-.02em}
 .cta-big .script{font-family:var(--font-script);text-transform:none;color:var(--slate);font-size:clamp(2.6rem,11vw,10rem)}
 .cta-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem}
-.cta-links a{border:1px solid var(--invert-line);border-radius:100px;padding:.9rem 1.7rem;font-size:.95rem;transition:all .3s ease}
+.cta-links a{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:3.4rem;height:3.4rem;padding:0;
+  border:1px solid var(--invert-line);border-radius:50%;
+  transition:all .3s ease;
+}
+.cta-links a svg{width:1.25rem;height:1.25rem;display:block}
 .cta-links a:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .foot{margin-top:5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.8rem;color:var(--slate);border-top:1px solid var(--invert-line-soft);padding-top:1.5rem;text-align:left}
 .foot .fbrand{font-family:var(--font-display);font-size:1.4rem;color:var(--paper)}
@@ -402,7 +498,7 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .reveal{opacity:1;transform:none}
   .hero h1 .word span{transform:none}
-  .hero .sub,.hero .actions{opacity:1;transform:none}
+  .hero .sub,.hero .actions,.hero-visual{opacity:1;transform:none}
 }
 </style>
 <noscript><style>html body{opacity:1!important}</style></noscript>
@@ -480,17 +576,24 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 
 <!-- HERO -->
 <section class="hero" id="top">
-  <div class="eyebrow"><span class="line"></span> <span data-i18n="hero.eyebrow">TT Mkting — Agencia de marketing digital</span></div>
-  <h1>
-    <span class="word"><span data-i18n="hero.w1">Hacemos</span></span>
-    <span class="word"><span data-i18n="hero.w2">crecer</span></span>
-    <span class="word"><span data-i18n="hero.w3">marcas</span></span>
-    <span class="script" data-i18n="hero.script">en redes.</span>
-  </h1>
-  <p class="sub" data-i18n="hero.sub">Estrategia, contenido y gestión de redes sociales para emprendedores, pymes y empresas. Cercano, detallista y flexible.</p>
-  <div class="actions">
-    <a href="#packs" class="btn solid" data-cursor><span data-i18n="hero.cta1">Armá tu pack</span> <span class="arrow">→</span></a>
-    <a href="#trabajos" class="btn ghost" data-cursor data-i18n="hero.cta2">Ver trabajos</a>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="line"></span> <span data-i18n="hero.eyebrow">TT Mkting — Agencia de marketing digital</span></div>
+      <h1>
+        <span class="word"><span data-i18n="hero.w1">Hacemos</span></span>
+        <span class="word"><span data-i18n="hero.w2">crecer</span></span>
+        <span class="word"><span data-i18n="hero.w3">marcas</span></span>
+        <span class="script" data-i18n="hero.script">en redes.</span>
+      </h1>
+      <p class="sub" data-i18n="hero.sub">Estrategia, contenido y gestión de redes sociales para emprendedores, pymes y empresas. Cercano, detallista y flexible.</p>
+      <div class="actions">
+        <a href="#packs" class="btn solid" data-cursor><span data-i18n="hero.cta1">Armá tu pack</span> <span class="arrow">→</span></a>
+        <a href="#trabajos" class="btn ghost" data-cursor data-i18n="hero.cta2">Ver trabajos</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="images/trini-hero.webp?v=3" width="411" height="932" alt="Trinidad Tognini, fundadora de TT Mkting" data-i18n-alt="hero.photoAlt" decoding="async" fetchpriority="high">
+    </div>
   </div>
   <div class="scroll-cue"><span data-i18n="hero.scroll">Scroll</span><span class="ball"></span></div>
 </section>
@@ -648,9 +751,15 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
   <div class="wrap reveal">
     <div class="cta-big" data-i18n-html="contact.title">Trabajemos<br><span class="script">juntos.</span></div>
     <div class="cta-links">
-      <a href="https://wa.me/5491159639468" target="_blank" rel="noopener" data-cursor>WhatsApp · 11 5963-9468</a>
-      <a href="https://instagram.com/trinitognini" target="_blank" rel="noopener" data-cursor>Instagram · @trinitognini</a>
-      <a href="mailto:trinitogniniwork@gmail.com" data-cursor>trinitogniniwork@gmail.com</a>
+      <a href="https://wa.me/5491159639468" target="_blank" rel="noopener" data-cursor aria-label="WhatsApp · 11 5963-9468" title="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/ttmkting/" target="_blank" rel="noopener" data-cursor aria-label="Instagram · @ttmkting" title="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="mailto:trinitogniniwork@gmail.com" data-cursor aria-label="trinitogniniwork@gmail.com" title="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 7 9-7"/></svg>
+      </a>
     </div>
     <div class="foot">
       <span class="fbrand">tt<span style="color:var(--slate)">.</span></span>
@@ -659,6 +768,26 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
     </div>
   </div>
 </section>
+
+<!-- PROJECT MODAL -->
+<div class="work-modal" id="workModal" aria-hidden="true">
+  <button type="button" class="work-modal-backdrop" id="workModalBackdrop" aria-label="Cerrar"></button>
+  <div class="work-modal-panel" role="dialog" aria-modal="true" aria-labelledby="workModalTitle" tabindex="-1">
+    <button type="button" class="work-modal-close" id="workModalClose" aria-label="Cerrar">×</button>
+    <div class="work-modal-media">
+      <img id="workModalImg" src="" alt="">
+    </div>
+    <div class="work-modal-body">
+      <div class="work-modal-tag" id="workModalTag"></div>
+      <h3 class="work-modal-title" id="workModalTitle"></h3>
+      <p class="work-modal-desc" id="workModalDesc"></p>
+      <div class="work-modal-links">
+        <a id="workModalIg" href="#" target="_blank" rel="noopener" data-cursor data-i18n="work.ig">Instagram</a>
+        <a id="workModalWeb" href="#" target="_blank" rel="noopener" data-cursor data-i18n="work.web">Sitio web</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -695,6 +824,7 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
       'hero.cta1': 'Armá tu pack',
       'hero.cta2': 'Ver trabajos',
       'hero.scroll': 'Scroll',
+      'hero.photoAlt': 'Trinidad Tognini, fundadora de TT Mkting',
       strip: ['Placas gráficas','Copywriting','Manual de marca','Foto & video','Edición','Gestión de redes','Estrategia','Pauta publicitaria','Reportes'],
       'about.title': 'Sobre <span class="script">nosotros</span>',
       'about.lead': 'Hace más de 3 años ayudamos a marcas a <em>conectar</em> con su audiencia y potenciar su presencia digital.',
@@ -719,6 +849,10 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
       'work.title': 'Trabajos <span class="script">realizados</span>',
       'work.hint': 'Seguí bajando',
       'work.alt': 'Proyecto de marketing en redes — ',
+      'work.ig': 'Instagram',
+      'work.web': 'Sitio web',
+      'work.close': 'Cerrar',
+      'work.open': 'Ver proyecto',
       'results.title': 'Resultados',
       'results.l1': 'marcas acompañadas en su crecimiento',
       'results.l2': 'años gestionando y creciendo redes',
@@ -793,6 +927,7 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
       'hero.cta1': 'Build your pack',
       'hero.cta2': 'View work',
       'hero.scroll': 'Scroll',
+      'hero.photoAlt': 'Trinidad Tognini, founder of TT Mkting',
       strip: ['Graphic posts','Copywriting','Brand guidelines','Photo & video','Editing','Social management','Strategy','Paid ads','Reports'],
       'about.title': 'About <span class="script">us</span>',
       'about.lead': 'For over 3 years we have helped brands <em>connect</em> with their audience and grow their digital presence.',
@@ -817,6 +952,10 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
       'work.title': 'Selected <span class="script">work</span>',
       'work.hint': 'Keep scrolling',
       'work.alt': 'Social media marketing project — ',
+      'work.ig': 'Instagram',
+      'work.web': 'Website',
+      'work.close': 'Close',
+      'work.open': 'View project',
       'results.title': 'Results',
       'results.l1': 'brands supported in their growth',
       'results.l2': 'years managing and growing socials',
@@ -960,6 +1099,9 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
     document.querySelectorAll('[data-i18n-aria]').forEach(function(el){
       el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
     });
+    document.querySelectorAll('[data-i18n-alt]').forEach(function(el){
+      el.setAttribute('alt', t(el.getAttribute('data-i18n-alt')));
+    });
     document.title = t('metaTitle');
     var meta = document.querySelector('meta[name="description"]');
     if(meta) meta.setAttribute('content', t('metaDesc'));
@@ -971,6 +1113,13 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
       var name = im.getAttribute('data-name') || '';
       im.alt = t('work.alt') + name;
     });
+    document.querySelectorAll('#htrack .card').forEach(function(card){
+      var name = (card.querySelector('img') && card.querySelector('img').getAttribute('data-name')) || '';
+      if(name) card.setAttribute('aria-label', t('work.open') + ': ' + name);
+    });
+    if(typeof activeWorkIndex === 'number' && activeWorkIndex >= 0 && typeof fillWorkModal === 'function'){
+      fillWorkModal(activeWorkIndex);
+    }
     syncThemeUI();
   }
 
@@ -1029,28 +1178,240 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 
   /* ---------- render works ---------- */
   var works = [
-    { name: "Gluck", ig: "https://instagram.com/trinitognini", img: "images/gluck-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Carmela", ig: "https://instagram.com/trinitognini", img: "images/carmela-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Las Uñas de Fío", ig: "https://instagram.com/trinitognini", img: "images/las-unas-de-fio-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Wanama", ig: "https://instagram.com/trinitognini", img: "images/wanama-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Yagmour", ig: "https://instagram.com/trinitognini", img: "images/yagmour-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Sky Pack", ig: "https://instagram.com/trinitognini", img: "images/sky-pack-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Pau Martinez", ig: "https://instagram.com/trinitognini", img: "images/pau-martinez-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Estancia Vigil", ig: "https://instagram.com/trinitognini", img: "images/estancia-vigil-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Cortes Argentina", ig: "https://instagram.com/trinitognini", img: "images/cortes-argentina-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Remax Rio", ig: "https://instagram.com/trinitognini", img: "images/remax-rio-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Cabañas Antihue", ig: "https://instagram.com/trinitognini", img: "images/cabanas-antihue-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Peluquería Ezeangel", ig: "https://instagram.com/trinitognini", img: "images/peluqueria-ezeangel-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Amaisa", ig: "https://instagram.com/trinitognini", img: "images/amaisa-marketing-redes-sociales.webp", w: 620, h: 876 },
-    { name: "Agentes Inmobiliarios", ig: "https://instagram.com/trinitognini", img: "images/agentes-inmobiliarios-marketing-redes-sociales.webp", w: 620, h: 876 }
+    {
+      name: "Gluck",
+      tag: { es: "Recoleta · Gastronomía", en: "Recoleta · Food & drink" },
+      desc: {
+        es: "Gestión de contenido para cervecería y gastronomía: platos, cervezas y la experiencia en el local, con una estética oscura y apetitosa para Instagram.",
+        en: "Content management for a brewery and food venue: dishes, beers and the on-site experience, with a dark, appetizing look for Instagram."
+      },
+      ig: "https://www.instagram.com/gluckrecoleta/",
+      web: "https://gluckcerveceria.com/",
+      img: "images/gluck-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Carmela",
+      tag: { es: "Café & brunch", en: "Café & brunch" },
+      desc: {
+        es: "Contenido visual de café, pastelería y brunch: piezas que destacan producto, ambientación y la calidez de la marca en redes.",
+        en: "Visual content for coffee, pastry and brunch: pieces that highlight product, atmosphere and the warmth of the brand on social."
+      },
+      ig: "",
+      web: "",
+      img: "images/carmela-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Las Uñas de Fío",
+      tag: { es: "Belleza & estética", en: "Beauty & aesthetics" },
+      desc: {
+        es: "Community y contenido para nail studio: manicuras, detalle de diseños y ambientación del salón para potenciar consultas.",
+        en: "Community and content for a nail studio: manicures, design details and salon atmosphere to drive inquiries."
+      },
+      ig: "https://www.instagram.com/lasunasdefio/",
+      web: "",
+      img: "images/las-unas-de-fio-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Wanama",
+      tag: { es: "Moda", en: "Fashion" },
+      desc: {
+        es: "Contenido de moda y colecciones: lookbooks, producto y piezas pensadas para feed y stories de una marca consolidada.",
+        en: "Fashion and collection content: lookbooks, product and pieces designed for feed and stories of an established brand."
+      },
+      ig: "https://www.instagram.com/wanama/",
+      web: "https://www.wanama.com/",
+      img: "images/wanama-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Yagmour",
+      tag: { es: "Moda femenina", en: "Women's fashion" },
+      desc: {
+        es: "Estrategia y contenido para marca de indumentaria: producto, campañas y comunicación alineada a la identidad de Yagmour.",
+        en: "Strategy and content for an apparel brand: product, campaigns and communication aligned with Yagmour's identity."
+      },
+      ig: "https://www.instagram.com/yagmour/",
+      web: "https://yagmour.com.ar/",
+      img: "images/yagmour-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Sky Pack",
+      tag: { es: "Importados & lifestyle", en: "Imports & lifestyle" },
+      desc: {
+        es: "Contenido lifestyle de productos importados: beauty, sneakers y gadgets, con foco en deseo de compra y dinámica de stories.",
+        en: "Lifestyle content for imported products: beauty, sneakers and gadgets, focused on purchase desire and stories dynamics."
+      },
+      ig: "",
+      web: "",
+      img: "images/sky-pack-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Pau Martinez",
+      tag: { es: "Deco & interiores", en: "Decor & interiors" },
+      desc: {
+        es: "Contenido para proyecto de deco e interiores: ambientaciones, detalle y narrativa visual que transmite estilo y calidez.",
+        en: "Content for a decor and interiors project: spaces, detail and visual storytelling that convey style and warmth."
+      },
+      ig: "",
+      web: "",
+      img: "images/pau-martinez-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Estancia Vigil",
+      tag: { es: "Vino & experiencias", en: "Wine & experiences" },
+      desc: {
+        es: "Contenido para experiencia enogastronómica: vino, mercado y turismo de cercanía, con una estética premium y sensorial.",
+        en: "Content for a wine and food experience: wine, market and nearby tourism, with a premium, sensory aesthetic."
+      },
+      ig: "https://www.instagram.com/estancia.vigil/",
+      web: "https://www.estanciavigil.com/",
+      img: "images/estancia-vigil-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Cortes Argentina",
+      tag: { es: "Carnes & producto", en: "Meats & product" },
+      desc: {
+        es: "Contenido de marca y producto para cortes de carne: piezas que resaltan calidad, origen y propuesta gastronómica.",
+        en: "Brand and product content for meat cuts: pieces that highlight quality, origin and the food offering."
+      },
+      ig: "",
+      web: "",
+      img: "images/cortes-argentina-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Remax Rio",
+      tag: { es: "Inmobiliaria", en: "Real estate" },
+      desc: {
+        es: "Gestión de redes para inmobiliaria: propiedades, equipo y contenido que genera consultas y posiciona la marca localmente.",
+        en: "Social management for a real estate brand: listings, team and content that drives inquiries and local positioning."
+      },
+      ig: "",
+      web: "",
+      img: "images/remax-rio-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Cabañas Antihue",
+      tag: { es: "Turismo & cabañas", en: "Tourism & cabins" },
+      desc: {
+        es: "Contenido turístico para cabañas: entorno, estadías y clima de escapada, pensado para inspirar reservas desde redes.",
+        en: "Tourism content for cabins: surroundings, stays and getaway vibes, designed to inspire bookings from social."
+      },
+      ig: "",
+      web: "",
+      img: "images/cabanas-antihue-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Peluquería Ezeangel",
+      tag: { es: "Peluquería & belleza", en: "Hair & beauty" },
+      desc: {
+        es: "Contenido para peluquería: looks, coloración y vida del salón, con foco en atraer turnos y mostrar resultados reales.",
+        en: "Content for a hair salon: looks, color and salon life, focused on booking appointments and showing real results."
+      },
+      ig: "https://www.instagram.com/ezeangel.oficial/",
+      web: "https://ezeangel.com/",
+      img: "images/peluqueria-ezeangel-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Amaisa",
+      tag: { es: "Moda", en: "Fashion" },
+      desc: {
+        es: "Contenido y presencia digital para marca de moda: feed, stories y piezas orientadas a catálogo y conversión.",
+        en: "Content and digital presence for a fashion brand: feed, stories and pieces oriented to catalog and conversion."
+      },
+      ig: "",
+      web: "",
+      img: "images/amaisa-marketing-redes-sociales.webp", w: 620, h: 876
+    },
+    {
+      name: "Agentes Inmobiliarios",
+      tag: { es: "Real estate", en: "Real estate" },
+      desc: {
+        es: "Contenido para agentes inmobiliarios: captación, propiedades y marca personal para generar leads en redes.",
+        en: "Content for real estate agents: prospecting, listings and personal brand to generate leads on social."
+      },
+      ig: "",
+      web: "",
+      img: "images/agentes-inmobiliarios-marketing-redes-sociales.webp", w: 620, h: 876
+    }
   ];
+
   var ht = document.getElementById('htrack');
-  works.forEach(function(w){
-    var c = document.createElement('a');
+  var workModal = document.getElementById('workModal');
+  var workModalPanel = workModal ? workModal.querySelector('.work-modal-panel') : null;
+  var workModalImg = document.getElementById('workModalImg');
+  var workModalTag = document.getElementById('workModalTag');
+  var workModalTitle = document.getElementById('workModalTitle');
+  var workModalDesc = document.getElementById('workModalDesc');
+  var workModalIg = document.getElementById('workModalIg');
+  var workModalWeb = document.getElementById('workModalWeb');
+  var workModalClose = document.getElementById('workModalClose');
+  var workModalBackdrop = document.getElementById('workModalBackdrop');
+  var activeWorkIndex = -1;
+  var lastFocusedBeforeModal = null;
+
+  function localizeWork(w, key){
+    var val = w[key];
+    if(!val) return '';
+    if(typeof val === 'string') return val;
+    return val[currentLang()] || val.es || '';
+  }
+
+  function setModalLink(el, url, label){
+    if(!el) return;
+    if(url){
+      el.href = url;
+      el.hidden = false;
+      el.removeAttribute('aria-hidden');
+      el.textContent = label;
+    } else {
+      el.removeAttribute('href');
+      el.hidden = true;
+      el.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function fillWorkModal(index){
+    var w = works[index];
+    if(!w || !workModal) return;
+    activeWorkIndex = index;
+    workModalImg.src = w.img + '?v=5';
+    workModalImg.alt = t('work.alt') + w.name;
+    workModalTag.textContent = localizeWork(w, 'tag');
+    workModalTitle.textContent = w.name;
+    workModalDesc.textContent = localizeWork(w, 'desc');
+    setModalLink(workModalIg, w.ig, t('work.ig'));
+    setModalLink(workModalWeb, w.web, t('work.web'));
+    if(workModalClose) workModalClose.setAttribute('aria-label', t('work.close'));
+    if(workModalBackdrop) workModalBackdrop.setAttribute('aria-label', t('work.close'));
+  }
+
+  function openWorkModal(index){
+    if(!workModal) return;
+    lastFocusedBeforeModal = document.activeElement;
+    fillWorkModal(index);
+    workModal.classList.add('open');
+    workModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    if(workModalPanel) workModalPanel.focus({ preventScroll: true });
+  }
+
+  function closeWorkModal(){
+    if(!workModal || !workModal.classList.contains('open')) return;
+    workModal.classList.remove('open');
+    workModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    activeWorkIndex = -1;
+    if(lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function'){
+      lastFocusedBeforeModal.focus({ preventScroll: true });
+    }
+  }
+
+  works.forEach(function(w, i){
+    var c = document.createElement('button');
+    c.type = 'button';
     c.className = 'card';
-    c.href = w.ig;
-    c.target = '_blank'; c.rel = 'noopener';
     c.setAttribute('data-cursor','');
+    c.setAttribute('aria-label', t('work.open') + ': ' + w.name);
+    c.addEventListener('click', function(){ openWorkModal(i); });
     var im = document.createElement('img');
     im.src = w.img + '?v=5';
     im.loading = 'lazy';
@@ -1061,6 +1422,12 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
     im.alt = t('work.alt') + w.name;
     c.appendChild(im);
     ht.appendChild(c);
+  });
+
+  if(workModalClose) workModalClose.addEventListener('click', closeWorkModal);
+  if(workModalBackdrop) workModalBackdrop.addEventListener('click', closeWorkModal);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeWorkModal();
   });
 
   /* ---------- counters ---------- */
