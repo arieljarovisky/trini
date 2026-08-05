@@ -278,14 +278,16 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 /* ---------- horizontal works gallery ---------- */
 #trabajos{padding:0;background:var(--ink);color:var(--paper)}
 .hwrap{height:400vh;position:relative}
-.hsticky{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
-.h-head{padding:2rem var(--pad) .5rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
+.hsticky{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;overflow:hidden}
+.h-head{width:100%;padding:2rem var(--pad) .5rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
 .h-head .sec-title{color:var(--paper)}
 .h-head .sec-title .script{color:var(--slate)}
 .h-head .hint{font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);display:flex;align-items:center;gap:.6rem}
 .h-head .hint .arr{animation:cue2 1.6s ease-in-out infinite}
 @keyframes cue2{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
-.htrack{display:flex;gap:clamp(1.2rem,2.5vw,2.4rem);padding:1.5rem var(--pad);will-change:transform}
+.htrack{display:flex;gap:clamp(1.2rem,2.5vw,2.4rem);padding:1.5rem 0;padding-left:var(--pad);width:max-content;max-width:none;will-change:transform}
+/* Spacer al final: el padding-right de flex no entra en scrollWidth en Chromium */
+.htrack::after{content:"";flex:0 0 var(--pad);width:var(--pad);height:1px}
 .card{
   flex:0 0 auto;height:clamp(440px,76vh,720px);aspect-ratio:1055/1491;
   position:relative;overflow:hidden;border-radius:16px;display:block;
@@ -1084,6 +1086,20 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
   /* ---------- horizontal scroll gallery ---------- */
   var hwrap = document.getElementById('hwrap');
   var htrack = document.getElementById('htrack');
+  function galleryMaxX(){
+    if(!htrack) return 0;
+    var last = htrack.querySelector('.card:last-of-type');
+    if(!last) return Math.max(0, htrack.scrollWidth - window.innerWidth);
+    var pad = parseFloat(getComputedStyle(htrack).paddingLeft) || 0;
+    var curX = 0;
+    var tr = getComputedStyle(htrack).transform;
+    if(tr && tr !== 'none'){
+      try{ curX = new DOMMatrixReadOnly(tr).m41; }catch(e){ curX = 0; }
+    }
+    /* Posición del borde derecho de la última card sin transform + padding final */
+    var end = last.getBoundingClientRect().right - curX + pad;
+    return Math.max(0, end - window.innerWidth);
+  }
   function horiz(){
     if(!hwrap) return;
     var rect = hwrap.getBoundingClientRect();
@@ -1091,8 +1107,7 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
     var total = hwrap.offsetHeight - vh;
     var progressed = Math.min(Math.max(-rect.top,0), total);
     var p = total>0 ? progressed/total : 0;
-    var maxX = htrack.scrollWidth - window.innerWidth;
-    if(maxX < 0) maxX = 0;
+    var maxX = galleryMaxX();
     htrack.style.transform = 'translateX(' + (-p*maxX) + 'px)';
   }
 
