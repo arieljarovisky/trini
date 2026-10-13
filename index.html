@@ -592,6 +592,13 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 .work-modal-duo .wm-ph img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
 }
+.work-modal-strip{
+  display:flex;gap:6px;margin-top:8px;
+}
+.work-modal-strip .wm-ph{
+  flex:1 1 0;aspect-ratio:1;min-width:0;border-radius:8px;overflow:hidden;position:relative;background:#1a1a1a;
+}
+.work-modal-strip .wm-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .work-modal-extra:empty{display:none}
 .work-modal-extra{
   margin-top:auto;padding-top:1.25rem;
@@ -2212,9 +2219,8 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
   }
 
   function buildModalShowcase(w){
-    var tag = localizeWork(w, 'tag');
     var alt = workImgAlt(w.name);
-    var html = '<h3 class="work-modal-brand">'+w.name+'</h3><p class="work-modal-cat">'+tag+'</p>';
+    var html = '';
     var photos = (w.photos && w.photos.length) ? w.photos.slice() : [];
     if(w.reel || photos.length){
       var side = [
@@ -2233,6 +2239,13 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
           '<div class="wm-ph"><img src="'+side[2]+'" alt="'+alt+'"></div>' +
         '</div>' +
       '</div>';
+      if(photos.length > 3){
+        html += '<div class="work-modal-strip">' +
+          photos.slice(3).map(function(src){
+            return '<div class="wm-ph"><img src="'+src+'" alt="'+alt+'" loading="lazy"></div>';
+          }).join('') +
+        '</div>';
+      }
     } else {
       html += '<div class="work-modal-fallback"><img src="'+w.img+'?v=5" alt="'+alt+'"></div>';
     }
@@ -2254,12 +2267,8 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
     }
     var workModalExtra = document.getElementById('workModalExtra');
     if(workModalExtra){
-      var extras = (w.photos && w.photos.length > 3) ? w.photos.slice(3) : [];
-      var extraAlt = workImgAlt(w.name);
-      workModalExtra.dataset.n = String(extras.length);
-      workModalExtra.innerHTML = extras.map(function(src){
-        return '<div class="wm-ph"><img src="'+src+'" alt="'+extraAlt+'"></div>';
-      }).join('');
+      workModalExtra.innerHTML = '';
+      workModalExtra.removeAttribute('data-n');
     }
     workModalTag.textContent = localizeWork(w, 'tag');
     workModalTitle.textContent = w.name;
