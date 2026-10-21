@@ -1521,6 +1521,7 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       'work.open': 'Ver proyecto',
       'work.more': 'Ver todo →',
       'work.kind': 'Reel + fotos',
+      'work.kindPhotos': 'Fotos',
       'work.photos': '+{n} fotos',
       'results.title': 'Resultados',
       'results.l1': 'marcas acompañadas en su crecimiento',
@@ -1659,6 +1660,7 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       'work.open': 'View project',
       'work.more': 'See all →',
       'work.kind': 'Reel + photos',
+      'work.kindPhotos': 'Photos',
       'work.photos': '+{n} photos',
       'results.title': 'Results',
       'results.l1': 'brands supported in their growth',
@@ -2077,6 +2079,48 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       w: 620, h: 876
     },
     {
+      name: "Wanama",
+      tag: { es: "Moda", en: "Fashion" },
+      desc: {
+        es: "Contenido de moda y colecciones: lookbooks, producto y piezas pensadas para feed y stories de una marca consolidada.",
+        en: "Fashion and collection content: lookbooks, product and pieces designed for feed and stories of an established brand."
+      },
+      ig: "https://www.instagram.com/wanama/",
+      web: "https://www.wanama.com/",
+      img: "images/wanama-marketing-redes-sociales.webp",
+      photos: [
+        "images/wanama/wanama-1.webp",
+        "images/wanama/wanama-2.webp",
+        "images/wanama/wanama-3.webp",
+        "images/wanama/wanama-4.webp",
+        "images/wanama/wanama-5.webp",
+        "images/wanama/wanama-6.webp"
+      ],
+      more: 6,
+      w: 620, h: 876
+    },
+    {
+      name: "Estancia Vigil",
+      tag: { es: "Vino & experiencias", en: "Wine & experiences" },
+      desc: {
+        es: "Contenido para experiencia enogastronómica: vino, mercado y turismo de cercanía, con una estética premium y sensorial.",
+        en: "Content for a wine and food experience: wine, market and nearby tourism, with a premium, sensory aesthetic."
+      },
+      ig: "https://www.instagram.com/estancia.vigil/",
+      web: "https://www.estanciavigil.com/",
+      img: "images/estancia-vigil-marketing-redes-sociales.webp",
+      photos: [
+        "images/estancia-vigil/estancia-vigil-1.webp",
+        "images/estancia-vigil/estancia-vigil-2.webp",
+        "images/estancia-vigil/estancia-vigil-3.webp",
+        "images/estancia-vigil/estancia-vigil-4.webp",
+        "images/estancia-vigil/estancia-vigil-5.webp",
+        "images/estancia-vigil/estancia-vigil-6.webp"
+      ],
+      more: 6,
+      w: 620, h: 876
+    },
+    {
       name: "Sky Pack",
       tag: { es: "Importados & lifestyle", en: "Imports & lifestyle" },
       desc: {
@@ -2125,17 +2169,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       img: "images/las-unas-de-fio-marketing-redes-sociales.webp", w: 620, h: 876
     },
     {
-      name: "Wanama",
-      tag: { es: "Moda", en: "Fashion" },
-      desc: {
-        es: "Contenido de moda y colecciones: lookbooks, producto y piezas pensadas para feed y stories de una marca consolidada.",
-        en: "Fashion and collection content: lookbooks, product and pieces designed for feed and stories of an established brand."
-      },
-      ig: "https://www.instagram.com/wanama/",
-      web: "https://www.wanama.com/",
-      img: "images/wanama-marketing-redes-sociales.webp", w: 620, h: 876
-    },
-    {
       name: "Yagmour",
       tag: { es: "Moda femenina", en: "Women's fashion" },
       desc: {
@@ -2145,17 +2178,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       ig: "https://www.instagram.com/yagmour/",
       web: "https://yagmour.com.ar/",
       img: "images/yagmour-marketing-redes-sociales.webp", w: 620, h: 876
-    },
-    {
-      name: "Estancia Vigil",
-      tag: { es: "Vino & experiencias", en: "Wine & experiences" },
-      desc: {
-        es: "Contenido para experiencia enogastronómica: vino, mercado y turismo de cercanía, con una estética premium y sensorial.",
-        en: "Content for a wine and food experience: wine, market and nearby tourism, with a premium, sensory aesthetic."
-      },
-      ig: "https://www.instagram.com/estancia.vigil/",
-      web: "https://www.estanciavigil.com/",
-      img: "images/estancia-vigil-marketing-redes-sociales.webp", w: 620, h: 876
     },
     {
       name: "Cortes Argentina",
@@ -2248,6 +2270,21 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
     return w.img || '';
   }
 
+  function workPhotoLayout(w){
+    var photos = (w.photos && w.photos.length) ? w.photos.slice() : [];
+    var shift = (!w.reel && photos.length > 3) ? 1 : 0;
+    var pool = photos.length ? photos : [w.img, w.img, w.img];
+    return {
+      photos: photos,
+      side: [
+        pool[shift] || w.img,
+        pool[shift + 1] || pool[shift] || w.img,
+        pool[shift + 2] || pool[shift] || w.img
+      ],
+      extra: photos.slice(shift + 3)
+    };
+  }
+
   function armWorkVideo(vid){
     if(!vid || vid.dataset.armed === '1') return;
     vid.dataset.armed = '1';
@@ -2267,17 +2304,14 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
   function buildModalShowcase(w){
     var alt = workImgAlt(w.name);
     var html = '';
-    var photos = (w.photos && w.photos.length) ? w.photos.slice() : [];
+    var layout = workPhotoLayout(w);
+    var photos = layout.photos;
     if(w.reel || photos.length){
-      var side = [
-        photos[0] || w.img,
-        photos[1] || photos[0] || w.img,
-        photos[2] || photos[0] || w.img
-      ];
+      var side = layout.side;
       var poster = workPoster(w);
       var reelInner = w.reel
         ? '<video src="'+w.reel+'" poster="'+poster+'" muted loop playsinline autoplay preload="metadata" title="'+alt+'"></video><span class="wm-chip">Reel</span>'
-        : '<img src="'+(w.img||side[0])+'" alt="'+alt+'">';
+        : '<img src="'+(poster||w.img||side[0])+'" alt="'+alt+'">';
       html += '<div class="work-modal-duo">' +
         '<div class="wm-reel"'+(poster ? ' style="background-image:url(\''+poster+'\')"' : '')+'>'+reelInner+'</div>' +
         '<div class="wm-side">' +
@@ -2286,9 +2320,9 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
           '<div class="wm-ph"><img src="'+side[2]+'" alt="'+alt+'"></div>' +
         '</div>' +
       '</div>';
-      if(photos.length > 3){
+      if(layout.extra.length){
         html += '<div class="work-modal-strip">' +
-          photos.slice(3).map(function(src){
+          layout.extra.map(function(src){
             return '<div class="wm-ph"><img src="'+src+'" alt="'+alt+'" loading="lazy"></div>';
           }).join('') +
         '</div>';
@@ -2365,6 +2399,11 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
         '<span class="work-chip">Reel</span>' +
       '</div>';
     }
+    if(w.photos && w.photos.length){
+      return '<div class="work-ph work-reel">' +
+        '<img src="'+poster+'" alt="'+alt+'" data-name="'+w.name+'" loading="lazy" decoding="async">' +
+      '</div>';
+    }
     return '<div class="work-ph work-reel">' +
       '<img src="'+w.img+'?v=5" alt="'+alt+'" data-name="'+w.name+'" loading="lazy" decoding="async" style="object-position:center top">' +
       '<span class="work-bar" aria-hidden="true"><i></i></span>' +
@@ -2377,9 +2416,9 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
     if(!ht) return;
     ht.innerHTML = '';
     works.forEach(function(w, i){
-      var photos = (w.photos && w.photos.length) ? w.photos : [w.img, w.img, w.img];
-      var side = [photos[0] || w.img, photos[1] || photos[0] || w.img, photos[2] || photos[0] || w.img];
-      var moreN = w.more != null ? w.more : Math.max(photos.length, 11);
+      var layout = workPhotoLayout(w);
+      var side = layout.side;
+      var moreN = w.more != null ? w.more : Math.max(layout.photos.length, 11);
       var card = document.createElement('article');
       card.className = 'work-card';
       card.setAttribute('data-name', w.name);
@@ -2398,7 +2437,7 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
           '</div>' +
         '</div>' +
         '<div class="work-foot">' +
-          '<span data-i18n-foot="work.kind">'+t('work.kind')+'</span>' +
+          '<span data-i18n-foot="'+(w.reel ? 'work.kind' : (w.photos && w.photos.length ? 'work.kindPhotos' : 'work.kind'))+'">'+(w.reel ? t('work.kind') : (w.photos && w.photos.length ? t('work.kindPhotos') : t('work.kind')))+'</span>' +
           '<button type="button" data-cursor data-i18n-foot="work.more">'+t('work.more')+'</button>' +
         '</div>';
       card.querySelector('.work-foot button').addEventListener('click', function(e){
