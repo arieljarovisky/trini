@@ -323,7 +323,7 @@ header.nav.is-scrolled{
 }
 .hero.loaded .sub,.hero.loaded .actions{opacity:1;transform:translateY(0)}
 .hero-visual{
-  position:relative;justify-self:center;width:min(100%,340px);
+  position:relative;justify-self:center;width:min(100%,460px);
   opacity:0;transform:translateY(24px);transition:opacity .9s ease .35s,transform .9s cubic-bezier(.2,.8,.2,1) .35s;
 }
 .hero.loaded .hero-visual{opacity:1;transform:translateY(0)}
@@ -331,6 +331,10 @@ header.nav.is-scrolled{
   width:100%;height:auto;display:block;margin:0 auto;
   image-rendering:auto;
   -webkit-user-drag:none;user-select:none;pointer-events:none;
+  filter:drop-shadow(0 18px 28px rgba(0,0,0,.14));
+}
+[data-theme="dark"] .hero-visual img{
+  filter:drop-shadow(0 16px 30px rgba(0,0,0,.5));
 }
 .btn{
   display:inline-flex;align-items:center;gap:.6rem;font-family:var(--font-body);
@@ -353,7 +357,7 @@ header.nav.is-scrolled{
 @media(max-width:900px){
   .hero{padding-top:6.2rem;align-items:flex-start}
   .hero-grid{grid-template-columns:1fr;gap:1.6rem}
-  .hero-visual{justify-self:center;width:min(68vw,300px);margin-top:.2rem}
+  .hero-visual{justify-self:center;width:min(78vw,360px);margin-top:.2rem}
   .hero h1{font-size:clamp(2.6rem,14vw,5.5rem)}
   .hero h1 .script{font-size:clamp(2rem,10vw,3.6rem)}
   .hero .eyebrow{
@@ -390,13 +394,31 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 
 /* ---------- about ---------- */
 #nosotros{background:var(--paper)}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:start}
-.about-lead{font-family:var(--font-display);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:-.01em;font-size:clamp(1.8rem,3.4vw,3.3rem)}
+.about-grid{
+  display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
+  gap:clamp(2rem,5vw,5.5rem);align-items:start;
+}
+.about-photo{margin:0;border-radius:16px;overflow:hidden}
+.about-photo img{
+  width:100%;height:auto;display:block;
+  -webkit-user-drag:none;user-select:none;
+}
+.about-copy{min-width:0}
+.about-lead{font-family:var(--font-display);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:-.01em;font-size:clamp(1.8rem,3.4vw,3.3rem);margin-bottom:1.5rem}
 .about-lead em{font-family:var(--font-script);text-transform:none;font-style:normal;color:var(--slate)}
 .about-body p{color:var(--ink-soft);margin-bottom:1.2rem;max-width:52ch}
 .about-tags{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.8rem}
 .about-tags span{border:1px solid var(--beige-2);border-radius:100px;padding:.4rem 1rem;font-size:.8rem;letter-spacing:.04em;color:var(--ink-soft)}
-@media(max-width:820px){.about-grid{grid-template-columns:1fr}}
+@media(max-width:820px){
+  .about-grid{grid-template-columns:1fr;gap:1.8rem}
+  .about-photo{
+    aspect-ratio:4/5;overflow:hidden;max-width:min(100%,420px);
+    justify-self:center;width:100%;
+  }
+  .about-photo img{
+    width:100%;height:100%;object-fit:cover;object-position:center 40%;
+  }
+}
 
 /* ---------- services list ---------- */
 #servicios{background:var(--beige-1)}
@@ -1203,7 +1225,7 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       </div>
     </div>
     <div class="hero-visual">
-      <img src="images/trini-hero.webp?v=7" width="957" height="2109" alt="Trinidad Tognini, fundadora de TT Mkting" data-i18n-alt="hero.photoAlt" decoding="async" fetchpriority="high">
+      <img src="images/trini-hero.webp?v=10" width="881" height="1330" alt="Trinidad Tognini, fundadora de TT Mkting" data-i18n-alt="hero.photoAlt" decoding="async" fetchpriority="high">
     </div>
   </div>
   <div class="scroll-cue"><span data-i18n="hero.scroll">Scroll</span><span class="ball"></span></div>
@@ -1222,12 +1244,17 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       <h2 class="sec-title" data-i18n-html="about.title">Sobre <span class="script">nosotros</span></h2>
     </div>
     <div class="about-grid">
-      <p class="about-lead reveal" data-i18n-html="about.lead">Estrategia que <em>conecta</em>. Contenido que comunica. Marketing que hace crecer.</p>
-      <div class="about-body reveal">
-        <p data-i18n="about.p1">En TT Mkting creemos que una buena presencia digital no se trata solo de publicar, sino de tener una estrategia detrás de cada acción. Somos una agencia de marketing digital que acompaña a emprendedores, marcas, pymes y empresas en la construcción y crecimiento de su presencia online.</p>
-        <p data-i18n="about.p2">Combinamos estrategia, creatividad, contenido, gestión de redes sociales y pauta publicitaria para desarrollar comunicaciones que conecten con las personas y generen resultados. Trabajamos de manera cercana, detallista y flexible, adaptándonos a las necesidades y objetivos de cada proyecto. Desde Instagram, Facebook, TikTok y LinkedIn, creamos y gestionamos contenido pensado para comunicar, conectar y hacer crecer cada marca.</p>
-        <div class="about-tags">
-          <span>Instagram</span><span>Facebook</span><span>TikTok</span><span>LinkedIn</span><span data-i18n="about.tagCm">Community management</span><span data-i18n="about.tagPaid">Pauta publicitaria</span>
+      <figure class="about-photo reveal">
+        <img src="images/tt-equipo.webp" width="682" height="1024" alt="El equipo de TT Mkting trabajando juntas" data-i18n-alt="about.photoAlt" loading="lazy" decoding="async">
+      </figure>
+      <div class="about-copy">
+        <p class="about-lead reveal" data-i18n-html="about.lead">Estrategia que <em>conecta</em>. Contenido que comunica. Marketing que hace crecer.</p>
+        <div class="about-body reveal">
+          <p data-i18n="about.p1">En TT Mkting creemos que una buena presencia digital no se trata solo de publicar, sino de tener una estrategia detrás de cada acción. Somos una agencia de marketing digital que acompaña a emprendedores, marcas, pymes y empresas en la construcción y crecimiento de su presencia online.</p>
+          <p data-i18n="about.p2">Combinamos estrategia, creatividad, contenido, gestión de redes sociales y pauta publicitaria para desarrollar comunicaciones que conecten con las personas y generen resultados. Trabajamos de manera cercana, detallista y flexible, adaptándonos a las necesidades y objetivos de cada proyecto. Desde Instagram, Facebook, TikTok y LinkedIn, creamos y gestionamos contenido pensado para comunicar, conectar y hacer crecer cada marca.</p>
+          <div class="about-tags">
+            <span>Instagram</span><span>Facebook</span><span>TikTok</span><span>LinkedIn</span><span data-i18n="about.tagCm">Community management</span><span data-i18n="about.tagPaid">Pauta publicitaria</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1462,6 +1489,7 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       'about.p2': 'Combinamos estrategia, creatividad, contenido, gestión de redes sociales y pauta publicitaria para desarrollar comunicaciones que conecten con las personas y generen resultados. Trabajamos de manera cercana, detallista y flexible, adaptándonos a las necesidades y objetivos de cada proyecto. Desde Instagram, Facebook, TikTok y LinkedIn, creamos y gestionamos contenido pensado para comunicar, conectar y hacer crecer cada marca.',
       'about.tagCm': 'Community management',
       'about.tagPaid': 'Pauta publicitaria',
+      'about.photoAlt': 'El equipo de TT Mkting trabajando juntas',
       'services.title': 'Servicios',
       services: [
         ['Gestión de redes sociales','Community management integral de tu cuenta'],
@@ -1599,6 +1627,7 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       'about.p2': 'We combine strategy, creativity, content, social media management and paid advertising to develop communications that connect with people and drive results. We work in a close, detail-oriented and flexible way, adapting to each project\'s needs and goals. On Instagram, Facebook, TikTok and LinkedIn, we create and manage content designed to communicate, connect and grow every brand.',
       'about.tagCm': 'Community management',
       'about.tagPaid': 'Paid advertising',
+      'about.photoAlt': 'The TT Mkting team working together',
       'services.title': 'Services',
       services: [
         ['Social media management','Full community management for your accounts'],
@@ -1997,26 +2026,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
   /* ---------- render works ---------- */
   var works = [
     {
-      name: "Gluck",
-      tag: { es: "Recoleta · Gastronomía", en: "Recoleta · Food & drink" },
-      desc: {
-        es: "Gestión de contenido para cervecería y gastronomía: platos, cervezas y la experiencia en el local, con una estética oscura y apetitosa para Instagram.",
-        en: "Content management for a brewery and food venue: dishes, beers and the on-site experience, with a dark, appetizing look for Instagram."
-      },
-      ig: "https://www.instagram.com/gluckrecoleta/",
-      web: "https://gluckcerveceria.com/",
-      img: "images/gluck-marketing-redes-sociales.webp",
-      reel: "images/GLUCK/gluck-reel.mp4",
-      photos: [
-        "images/GLUCK/gluck-1.webp",
-        "images/GLUCK/gluck-2.webp",
-        "images/GLUCK/gluck-3.webp",
-        "images/GLUCK/gluck-4.webp"
-      ],
-      more: 4,
-      w: 620, h: 876
-    },
-    {
       name: "Carmela",
       tag: { es: "Café & brunch", en: "Café & brunch" },
       desc: {
@@ -2083,7 +2092,16 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       ig: "",
       web: "",
       img: "images/pau-martinez-marketing-redes-sociales.webp",
-      reel: "images/pau-martinez/pau-martinez-reel.mov",
+      reel: "images/pau-martinez/pau-martinez-reel.mp4",
+      photos: [
+        "images/pau-martinez/pau-martinez-1.webp",
+        "images/pau-martinez/pau-martinez-2.webp",
+        "images/pau-martinez/pau-martinez-3.webp",
+        "images/pau-martinez/pau-martinez-4.webp",
+        "images/pau-martinez/pau-martinez-5.webp",
+        "images/pau-martinez/pau-martinez-6.webp"
+      ],
+      more: 6,
       w: 620, h: 876
     },
     {
