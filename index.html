@@ -490,6 +490,8 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 .work-reel{aspect-ratio:9/16;border-radius:12px;isolation:isolate}
 .work-reel img,
 .work-reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.work-reel video{opacity:0;transition:opacity .35s ease}
+.work-reel.is-ready video{opacity:1}
 .work-reel.is-video::before,
 .work-reel.is-video .work-bar,
 .work-reel.is-video .work-play{display:none}
@@ -546,6 +548,8 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 @media (prefers-reduced-motion:reduce){
   .work-bar i{inset:0 30% 0 0;animation:none}
   .work-reel::before{animation:none}
+  .work-reel video,
+  .work-modal-duo .wm-reel video{transition:none}
 }
 
 /* ---------- project modal ---------- */
@@ -592,12 +596,15 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 }
 .work-modal-duo .wm-reel{
   position:relative;border-radius:14px;overflow:hidden;background:#1a1a1a;
+  background-size:cover;background-position:center;
   aspect-ratio:9/16;max-height:min(58svh,520px);align-self:stretch;
 }
 .work-modal-duo .wm-reel img,
 .work-modal-duo .wm-reel video{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
 }
+.work-modal-duo .wm-reel video{opacity:0;transition:opacity .35s ease}
+.work-modal-duo .wm-reel.is-ready video{opacity:1}
 .work-modal-duo .wm-chip{
   position:absolute;left:8px;bottom:8px;z-index:2;
   font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;
@@ -2026,6 +2033,76 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
   /* ---------- render works ---------- */
   var works = [
     {
+      name: "Pau Martinez",
+      tag: { es: "Deco & interiores", en: "Decor & interiors" },
+      desc: {
+        es: "Contenido para proyecto de deco e interiores: ambientaciones, detalle y narrativa visual que transmite estilo y calidez.",
+        en: "Content for a decor and interiors project: spaces, detail and visual storytelling that convey style and warmth."
+      },
+      ig: "",
+      web: "",
+      img: "images/pau-martinez-marketing-redes-sociales.webp",
+      reel: "images/pau-martinez/pau-martinez-reel.mp4",
+      photos: [
+        "images/pau-martinez/pau-martinez-1.webp",
+        "images/pau-martinez/pau-martinez-2.webp",
+        "images/pau-martinez/pau-martinez-3.webp",
+        "images/pau-martinez/pau-martinez-4.webp",
+        "images/pau-martinez/pau-martinez-5.webp",
+        "images/pau-martinez/pau-martinez-6.webp"
+      ],
+      more: 6,
+      w: 620, h: 876
+    },
+    {
+      name: "Cabañas Antihue",
+      tag: { es: "Turismo & cabañas", en: "Tourism & cabins" },
+      desc: {
+        es: "Contenido turístico para cabañas: entorno, estadías y clima de escapada, pensado para inspirar reservas desde redes.",
+        en: "Tourism content for cabins: surroundings, stays and getaway vibes, designed to inspire bookings from social."
+      },
+      ig: "",
+      web: "",
+      img: "images/cabanas-antihue-marketing-redes-sociales.webp",
+      reel: "images/antilhue/antilhue-reel.mp4",
+      photos: [
+        "images/antilhue/antilhue-1.webp?v=2",
+        "images/antilhue/antilhue-2.webp?v=2",
+        "images/antilhue/antilhue-3.webp?v=2",
+        "images/antilhue/antilhue-4.webp?v=3",
+        "images/antilhue/antilhue-5.webp?v=3",
+        "images/antilhue/antilhue-7.webp?v=3"
+      ],
+      more: 6,
+      w: 620, h: 876
+    },
+    {
+      name: "Sky Pack",
+      tag: { es: "Importados & lifestyle", en: "Imports & lifestyle" },
+      desc: {
+        es: "Contenido lifestyle de productos importados: beauty, sneakers y gadgets, con foco en deseo de compra y dinámica de stories.",
+        en: "Lifestyle content for imported products: beauty, sneakers and gadgets, focused on purchase desire and stories dynamics."
+      },
+      ig: "",
+      web: "",
+      img: "images/sky-pack-marketing-redes-sociales.webp",
+      reel: "images/sky-pack/sky-pack-reel.mov",
+      w: 620, h: 876
+    },
+    {
+      name: "Agentes Inmobiliarios",
+      tag: { es: "Real estate", en: "Real estate" },
+      desc: {
+        es: "Contenido para agentes inmobiliarios: captación, propiedades y marca personal para generar leads en redes.",
+        en: "Content for real estate agents: prospecting, listings and personal brand to generate leads on social."
+      },
+      ig: "",
+      web: "",
+      img: "images/agentes-inmobiliarios-marketing-redes-sociales.webp",
+      reel: "images/agentes-inmobiliarios/agentes-inmobiliarios-reel.mov",
+      w: 620, h: 876
+    },
+    {
       name: "Carmela",
       tag: { es: "Café & brunch", en: "Café & brunch" },
       desc: {
@@ -2070,41 +2147,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       img: "images/yagmour-marketing-redes-sociales.webp", w: 620, h: 876
     },
     {
-      name: "Sky Pack",
-      tag: { es: "Importados & lifestyle", en: "Imports & lifestyle" },
-      desc: {
-        es: "Contenido lifestyle de productos importados: beauty, sneakers y gadgets, con foco en deseo de compra y dinámica de stories.",
-        en: "Lifestyle content for imported products: beauty, sneakers and gadgets, focused on purchase desire and stories dynamics."
-      },
-      ig: "",
-      web: "",
-      img: "images/sky-pack-marketing-redes-sociales.webp",
-      reel: "images/sky-pack/sky-pack-reel.mov",
-      w: 620, h: 876
-    },
-    {
-      name: "Pau Martinez",
-      tag: { es: "Deco & interiores", en: "Decor & interiors" },
-      desc: {
-        es: "Contenido para proyecto de deco e interiores: ambientaciones, detalle y narrativa visual que transmite estilo y calidez.",
-        en: "Content for a decor and interiors project: spaces, detail and visual storytelling that convey style and warmth."
-      },
-      ig: "",
-      web: "",
-      img: "images/pau-martinez-marketing-redes-sociales.webp",
-      reel: "images/pau-martinez/pau-martinez-reel.mp4",
-      photos: [
-        "images/pau-martinez/pau-martinez-1.webp",
-        "images/pau-martinez/pau-martinez-2.webp",
-        "images/pau-martinez/pau-martinez-3.webp",
-        "images/pau-martinez/pau-martinez-4.webp",
-        "images/pau-martinez/pau-martinez-5.webp",
-        "images/pau-martinez/pau-martinez-6.webp"
-      ],
-      more: 6,
-      w: 620, h: 876
-    },
-    {
       name: "Estancia Vigil",
       tag: { es: "Vino & experiencias", en: "Wine & experiences" },
       desc: {
@@ -2138,28 +2180,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       img: "images/remax-rio-marketing-redes-sociales.webp", w: 620, h: 876
     },
     {
-      name: "Cabañas Antihue",
-      tag: { es: "Turismo & cabañas", en: "Tourism & cabins" },
-      desc: {
-        es: "Contenido turístico para cabañas: entorno, estadías y clima de escapada, pensado para inspirar reservas desde redes.",
-        en: "Tourism content for cabins: surroundings, stays and getaway vibes, designed to inspire bookings from social."
-      },
-      ig: "",
-      web: "",
-      img: "images/cabanas-antihue-marketing-redes-sociales.webp",
-      reel: "images/antilhue/antilhue-reel.mp4",
-      photos: [
-        "images/antilhue/antilhue-1.webp?v=2",
-        "images/antilhue/antilhue-2.webp?v=2",
-        "images/antilhue/antilhue-3.webp?v=2",
-        "images/antilhue/antilhue-4.webp?v=3",
-        "images/antilhue/antilhue-5.webp?v=3",
-        "images/antilhue/antilhue-7.webp?v=3"
-      ],
-      more: 6,
-      w: 620, h: 876
-    },
-    {
       name: "Peluquería Ezeangel",
       tag: { es: "Peluquería & belleza", en: "Hair & beauty" },
       desc: {
@@ -2180,19 +2200,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       ig: "",
       web: "",
       img: "images/amaisa-marketing-redes-sociales.webp", w: 620, h: 876
-    },
-    {
-      name: "Agentes Inmobiliarios",
-      tag: { es: "Real estate", en: "Real estate" },
-      desc: {
-        es: "Contenido para agentes inmobiliarios: captación, propiedades y marca personal para generar leads en redes.",
-        en: "Content for real estate agents: prospecting, listings and personal brand to generate leads on social."
-      },
-      ig: "",
-      web: "",
-      img: "images/agentes-inmobiliarios-marketing-redes-sociales.webp",
-      reel: "images/agentes-inmobiliarios/agentes-inmobiliarios-reel.mov",
-      w: 620, h: 876
     }
   ];
 
@@ -2236,6 +2243,27 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
     return t('work.alt') + (name || '');
   }
 
+  function workPoster(w){
+    if(w.photos && w.photos.length) return w.photos[0];
+    return w.img || '';
+  }
+
+  function armWorkVideo(vid){
+    if(!vid || vid.dataset.armed === '1') return;
+    vid.dataset.armed = '1';
+    vid.muted = true;
+    var wrap = vid.closest('.work-reel, .wm-reel');
+    function ready(){
+      if(wrap) wrap.classList.add('is-ready');
+    }
+    vid.addEventListener('playing', ready);
+    if(!vid.getAttribute('src') && vid.dataset.src){
+      vid.src = vid.dataset.src;
+    }
+    var play = vid.play();
+    if(play && typeof play.catch === 'function') play.catch(function(){});
+  }
+
   function buildModalShowcase(w){
     var alt = workImgAlt(w.name);
     var html = '';
@@ -2246,11 +2274,12 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
         photos[1] || photos[0] || w.img,
         photos[2] || photos[0] || w.img
       ];
+      var poster = workPoster(w);
       var reelInner = w.reel
-        ? '<video src="'+w.reel+'" muted loop playsinline autoplay preload="metadata" title="'+alt+'"></video><span class="wm-chip">Reel</span>'
+        ? '<video src="'+w.reel+'" poster="'+poster+'" muted loop playsinline autoplay preload="metadata" title="'+alt+'"></video><span class="wm-chip">Reel</span>'
         : '<img src="'+(w.img||side[0])+'" alt="'+alt+'">';
       html += '<div class="work-modal-duo">' +
-        '<div class="wm-reel">'+reelInner+'</div>' +
+        '<div class="wm-reel"'+(poster ? ' style="background-image:url(\''+poster+'\')"' : '')+'>'+reelInner+'</div>' +
         '<div class="wm-side">' +
           '<div class="wm-ph"><img src="'+side[0]+'" alt="'+alt+'"></div>' +
           '<div class="wm-ph"><img src="'+side[1]+'" alt="'+alt+'"></div>' +
@@ -2277,11 +2306,7 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
     if(workModalShowcase){
       workModalShowcase.innerHTML = buildModalShowcase(w);
       var vid = workModalShowcase.querySelector('video');
-      if(vid){
-        vid.muted = true;
-        var p = vid.play();
-        if(p && typeof p.catch === 'function') p.catch(function(){});
-      }
+      if(vid) armWorkVideo(vid);
     }
     var workModalExtra = document.getElementById('workModalExtra');
     if(workModalExtra){
@@ -2333,9 +2358,10 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
 
   function buildWorkReel(w){
     var alt = workImgAlt(w.name);
+    var poster = workPoster(w);
     if(w.reel){
-      return '<div class="work-ph work-reel is-video">' +
-        '<video src="'+w.reel+'" muted loop playsinline autoplay preload="metadata" data-name="'+w.name+'" title="'+alt+'"></video>' +
+      return '<div class="work-ph work-reel is-video"'+(poster ? ' style="background-image:url(\''+poster+'\')"' : '')+'>' +
+        '<video muted loop playsinline preload="none" poster="'+poster+'" data-src="'+w.reel+'" data-name="'+w.name+'" title="'+alt+'"></video>' +
         '<span class="work-chip">Reel</span>' +
       '</div>';
     }
@@ -2383,15 +2409,35 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
         if(e.target.closest('button')) return;
         openWorkModal(i);
       });
-      /* ensure muted autoplay after inject (some browsers) */
-      var vid = card.querySelector('video');
-      if(vid){
-        vid.muted = true;
-        var play = vid.play();
-        if(play && typeof play.catch === 'function') play.catch(function(){});
-      }
       ht.appendChild(card);
     });
+    observeWorkVideos();
+  }
+
+  var workVideoObserver = null;
+  function observeWorkVideos(){
+    if(workVideoObserver){
+      workVideoObserver.disconnect();
+      workVideoObserver = null;
+    }
+    if(!ht) return;
+    var videos = ht.querySelectorAll('video[data-src]');
+    if(!videos.length) return;
+    if(!('IntersectionObserver' in window)){
+      videos.forEach(armWorkVideo);
+      return;
+    }
+    workVideoObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var vid = entry.target;
+        if(entry.isIntersecting){
+          armWorkVideo(vid);
+        } else if(vid.dataset.armed === '1'){
+          try{ vid.pause(); }catch(e){}
+        }
+      });
+    }, { root: ht, rootMargin: '120px', threshold: 0.15 });
+    videos.forEach(function(vid){ workVideoObserver.observe(vid); });
   }
 
   if(workModalClose) workModalClose.addEventListener('click', closeWorkModal);
