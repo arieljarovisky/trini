@@ -122,9 +122,9 @@
   --invert-line:rgba(255,255,255,.3);
   --invert-line-soft:rgba(255,255,255,.2);
   --invert-muted:rgba(255,255,255,.8);
-  --card-border:rgba(255,255,255,.1);
-  --card-border-hover:rgba(255,255,255,.35);
-  --card-bg:#0a0a0a;
+  --card-border:rgba(0,0,0,.1);
+  --card-border-hover:rgba(0,0,0,.28);
+  --card-bg:#FFFFFF;
 
   --font-display:'Anton',Impact,sans-serif;
   --font-body:'Arimo',Helvetica,Arial,sans-serif;
@@ -146,9 +146,9 @@
   --invert-line:rgba(0,0,0,.22);
   --invert-line-soft:rgba(0,0,0,.15);
   --invert-muted:rgba(0,0,0,.72);
-  --card-border:rgba(0,0,0,.12);
-  --card-border-hover:rgba(0,0,0,.35);
-  --card-bg:#0d0c0b;
+  --card-border:rgba(255,255,255,.08);
+  --card-border-hover:rgba(255,255,255,.22);
+  --card-bg:#0a0a0a;
   color-scheme:dark;
 }
 
@@ -170,7 +170,8 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 ::selection{background:var(--ink);color:var(--paper)}
 section,#nosotros,#servicios,#trabajos,#resultados,#packs,#proceso,#testimonios,#contacto,
-.strip,.testi,.about-tags span,.btn,.pack-card,.pack-cta,.testi-nav,.testi-dots button{
+.strip,.testi,.about-tags span,.btn,.pack-card,.pack-cta,.testi-nav,.testi-dots button,
+.work-card,.work-head .sec-title,.work-head .hint,.work-cat,.work-foot,.work-foot button{
   transition:background-color .35s ease,color .35s ease,border-color .35s ease;
 }
 
@@ -444,24 +445,28 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 /* ---------- works duo gallery (scroll sticky) ---------- */
 #trabajos{
   padding:0;
-  background:#000;
-  color:#FFFEFA;
+  background:var(--paper);
+  color:var(--ink);
 }
-[data-theme="dark"] #trabajos{background:#070707}
+[data-theme="dark"] #trabajos{background:#070707;color:#FFFEFA}
 .hwrap{height:400vh;position:relative}
 .hsticky{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;overflow:hidden}
 .work-head{
   width:100%;padding:2rem var(--pad) .5rem;display:flex;justify-content:space-between;
   align-items:flex-end;flex-wrap:wrap;gap:1rem;
 }
-.work-head .sec-title{margin:0;color:#FFFEFA}
-.work-head .sec-title .script{color:rgba(255,254,250,.55)}
+.work-head .sec-title{margin:0;color:var(--ink)}
+.work-head .sec-title .script{color:var(--ink-soft)}
 .work-head .hint{
   font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(255,254,250,.62);
+  color:var(--ink-soft);
   display:flex;align-items:center;gap:.55rem;
 }
-.work-head .hint .arr{animation:cue2 1.6s ease-in-out infinite;color:#FFFEFA}
+.work-head .hint .arr{animation:cue2 1.6s ease-in-out infinite;color:var(--ink)}
+[data-theme="dark"] .work-head .sec-title{color:#FFFEFA}
+[data-theme="dark"] .work-head .sec-title .script{color:rgba(255,254,250,.55)}
+[data-theme="dark"] .work-head .hint{color:rgba(255,254,250,.62)}
+[data-theme="dark"] .work-head .hint .arr{color:#FFFEFA}
 @keyframes cue2{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
 .work-rail{
   display:flex;gap:clamp(1.2rem,2.5vw,2rem);
@@ -470,17 +475,19 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 .work-rail::after{content:"";flex:0 0 var(--pad);width:var(--pad);height:1px}
 .work-card{
   flex:0 0 clamp(280px,78vw,336px);
-  background:#0a0a0a;color:#FFFEFA;border-radius:22px;
+  background:var(--card-bg);color:var(--ink);border-radius:22px;
   padding:1.15rem 1.05rem 1.05rem;display:flex;flex-direction:column;
-  position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.08);
-  transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .3s ease;
+  position:relative;overflow:hidden;border:1px solid var(--card-border);
+  box-shadow:0 12px 32px rgba(0,0,0,.06);
+  transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background-color .35s ease,color .35s ease,box-shadow .35s ease;
 }
-.work-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.22)}
+.work-card:hover{transform:translateY(-4px);border-color:var(--card-border-hover)}
+[data-theme="dark"] .work-card{color:#FFFEFA;box-shadow:none}
 .work-brand{
   font-family:var(--font-display);font-weight:400;text-transform:uppercase;
   font-size:clamp(1.7rem,3.8vw,2.35rem);line-height:.9;margin:0;letter-spacing:-.01em;
 }
-.work-cat{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#9BA1A4;margin:.45rem 0 0}
+.work-cat{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin:.45rem 0 0}
 .work-media{display:grid;grid-template-columns:1.28fr 1fr;gap:6px;margin-top:1.05rem}
 .work-ph{
   background:#1a1a1a;background-size:cover;background-position:center;
@@ -530,18 +537,23 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
   background:rgba(0,0,0,.62);border-radius:99px;padding:4px 8px;pointer-events:none;
 }
 .work-foot{
-  margin-top: .9rem;padding-top:.8rem;border-top:1px solid rgba(255,254,250,.13);
+  margin-top: .9rem;padding-top:.8rem;border-top:1px solid color-mix(in srgb, var(--ink) 14%, transparent);
   display:flex;justify-content:space-between;align-items:center;
   font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;
 }
-.work-foot span{color:#9BA1A4}
+.work-foot span{color:var(--ink-soft)}
 .work-foot button{
-  background:none;border:none;color:#FFFEFA;font:inherit;letter-spacing:inherit;
-  text-transform:uppercase;cursor:pointer;padding:0 0 2px;border-bottom:1px solid #595B5B;
-  transition:border-color .2s ease;
+  background:none;border:none;color:var(--ink);font:inherit;letter-spacing:inherit;
+  text-transform:uppercase;cursor:pointer;padding:0 0 2px;border-bottom:1px solid var(--ink-soft);
+  transition:border-color .2s ease,color .35s ease;
 }
-.work-foot button:hover{border-color:#FFFEFA}
-.work-foot button:focus-visible{outline:2px solid #FFFEFA;outline-offset:3px}
+.work-foot button:hover{border-color:var(--ink)}
+.work-foot button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+[data-theme="dark"] .work-foot{border-top-color:rgba(255,254,250,.13)}
+[data-theme="dark"] .work-foot span{color:#9BA1A4}
+[data-theme="dark"] .work-foot button{color:#FFFEFA;border-bottom-color:#595B5B}
+[data-theme="dark"] .work-foot button:hover{border-color:#FFFEFA}
+[data-theme="dark"] .work-foot button:focus-visible{outline-color:#FFFEFA}
 @media(max-width:820px){
   .work-card{flex-basis:min(82vw,320px)}
 }
@@ -1260,7 +1272,7 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
           <p data-i18n="about.p1">En TT Mkting creemos que una buena presencia digital no se trata solo de publicar, sino de tener una estrategia detrás de cada acción. Somos una agencia de marketing digital que acompaña a emprendedores, marcas, pymes y empresas en la construcción y crecimiento de su presencia online.</p>
           <p data-i18n="about.p2">Combinamos estrategia, creatividad, contenido, gestión de redes sociales y pauta publicitaria para desarrollar comunicaciones que conecten con las personas y generen resultados. Trabajamos de manera cercana, detallista y flexible, adaptándonos a las necesidades y objetivos de cada proyecto. Desde Instagram, Facebook, TikTok y LinkedIn, creamos y gestionamos contenido pensado para comunicar, conectar y hacer crecer cada marca.</p>
           <div class="about-tags">
-            <span>Instagram</span><span>Facebook</span><span>TikTok</span><span>LinkedIn</span><span data-i18n="about.tagCm">Community management</span><span data-i18n="about.tagPaid">Pauta publicitaria</span>
+            <span>Instagram</span><span>Facebook</span><span>TikTok</span><span>LinkedIn</span><span>Meta Ads</span>
           </div>
         </div>
       </div>
@@ -1494,8 +1506,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       'about.lead': 'Estrategia que <em>conecta</em>. Contenido que comunica. Marketing que hace crecer.',
       'about.p1': 'En TT Mkting creemos que una buena presencia digital no se trata solo de publicar, sino de tener una estrategia detrás de cada acción. Somos una agencia de marketing digital que acompaña a emprendedores, marcas, pymes y empresas en la construcción y crecimiento de su presencia online.',
       'about.p2': 'Combinamos estrategia, creatividad, contenido, gestión de redes sociales y pauta publicitaria para desarrollar comunicaciones que conecten con las personas y generen resultados. Trabajamos de manera cercana, detallista y flexible, adaptándonos a las necesidades y objetivos de cada proyecto. Desde Instagram, Facebook, TikTok y LinkedIn, creamos y gestionamos contenido pensado para comunicar, conectar y hacer crecer cada marca.',
-      'about.tagCm': 'Community management',
-      'about.tagPaid': 'Pauta publicitaria',
       'about.photoAlt': 'El equipo de TT Mkting trabajando juntas',
       'services.title': 'Servicios',
       services: [
@@ -1633,8 +1643,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       'about.lead': 'Strategy that <em>connects</em>. Content that communicates. Marketing that grows.',
       'about.p1': 'At TT Mkting we believe a strong digital presence is not just about posting — it\'s about having a strategy behind every action. We are a digital marketing agency that supports entrepreneurs, brands, SMEs and companies in building and growing their online presence.',
       'about.p2': 'We combine strategy, creativity, content, social media management and paid advertising to develop communications that connect with people and drive results. We work in a close, detail-oriented and flexible way, adapting to each project\'s needs and goals. On Instagram, Facebook, TikTok and LinkedIn, we create and manage content designed to communicate, connect and grow every brand.',
-      'about.tagCm': 'Community management',
-      'about.tagPaid': 'Paid advertising',
       'about.photoAlt': 'The TT Mkting team working together',
       'services.title': 'Services',
       services: [
@@ -2121,6 +2129,25 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       w: 620, h: 876
     },
     {
+      name: "Yagmour",
+      tag: { es: "Moda femenina", en: "Women's fashion" },
+      desc: {
+        es: "Estrategia y contenido para marca de indumentaria: producto, campañas y comunicación alineada a la identidad de Yagmour.",
+        en: "Strategy and content for an apparel brand: product, campaigns and communication aligned with Yagmour's identity."
+      },
+      ig: "https://www.instagram.com/yagmour/",
+      web: "https://yagmour.com.ar/",
+      img: "images/yagmour-marketing-redes-sociales.webp",
+      photos: [
+        "images/yagmour/yagmour-1.webp",
+        "images/yagmour/yagmour-2.webp",
+        "images/yagmour/yagmour-3.webp",
+        "images/yagmour/yagmour-4.webp"
+      ],
+      more: 4,
+      w: 620, h: 876
+    },
+    {
       name: "Sky Pack",
       tag: { es: "Importados & lifestyle", en: "Imports & lifestyle" },
       desc: {
@@ -2167,17 +2194,6 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
       ig: "https://www.instagram.com/lasunasdefio/",
       web: "",
       img: "images/las-unas-de-fio-marketing-redes-sociales.webp", w: 620, h: 876
-    },
-    {
-      name: "Yagmour",
-      tag: { es: "Moda femenina", en: "Women's fashion" },
-      desc: {
-        es: "Estrategia y contenido para marca de indumentaria: producto, campañas y comunicación alineada a la identidad de Yagmour.",
-        en: "Strategy and content for an apparel brand: product, campaigns and communication aligned with Yagmour's identity."
-      },
-      ig: "https://www.instagram.com/yagmour/",
-      web: "https://yagmour.com.ar/",
-      img: "images/yagmour-marketing-redes-sociales.webp", w: 620, h: 876
     },
     {
       name: "Cortes Argentina",
@@ -2559,9 +2575,11 @@ body.modal-open .wa-dock{opacity:0;pointer-events:none}
     var cx=0,cy=0,tx=0,ty=0;
     document.addEventListener('mousemove',function(e){
       tx=e.clientX; ty=e.clientY; cur.style.opacity=1;
-      /* superficies siempre oscuras (no dependen del theme) */
-      var dark = !!e.target.closest('.work-card, .work-modal-showcase, #contacto, #proceso, #trabajos');
-      cur.classList.toggle('on-dark', dark);
+      /* contacto/proceso y el showcase del modal siguen oscuros; trabajos respeta el theme */
+      var alwaysDark = !!e.target.closest('.work-modal-showcase, #contacto, #proceso');
+      var worksDark = document.documentElement.getAttribute('data-theme') === 'dark'
+        && !!e.target.closest('#trabajos');
+      cur.classList.toggle('on-dark', alwaysDark || worksDark);
     });
     (function loop(){
       cx += (tx-cx)*0.2; cy += (ty-cy)*0.2;
