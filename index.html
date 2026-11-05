@@ -469,7 +469,7 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 [data-theme="dark"] .work-head .hint .arr{color:#FFFEFA}
 @keyframes cue2{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
 .work-rail{
-  display:flex;gap:clamp(1.2rem,2.5vw,2rem);
+  display:flex;gap:clamp(1.2rem,2.5vw,2rem);align-items:stretch;
   padding:1.5rem 0;padding-left:var(--pad);width:max-content;max-width:none;will-change:transform;
 }
 .work-rail::after{content:"";flex:0 0 var(--pad);width:var(--pad);height:1px}
@@ -486,8 +486,9 @@ section{padding:clamp(5rem,11vh,10rem) var(--pad);position:relative}
 .work-brand{
   font-family:var(--font-display);font-weight:400;text-transform:uppercase;
   font-size:clamp(1.7rem,3.8vw,2.35rem);line-height:.9;margin:0;letter-spacing:-.01em;
+  min-height:1.8em;
 }
-.work-cat{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin:.45rem 0 0}
+.work-cat{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin:.45rem 0 0;white-space:nowrap}
 .work-media{display:grid;grid-template-columns:1.28fr 1fr;gap:6px;margin-top:1.05rem}
 .work-ph{
   background:#1a1a1a;background-size:cover;background-position:center;
