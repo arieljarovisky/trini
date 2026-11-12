@@ -701,8 +701,15 @@ body.modal-open{overflow:hidden}
 @media(max-width:760px){
   .work-modal-panel{grid-template-columns:1fr;max-height:min(92svh,900px)}
   .work-modal-showcase{border-radius:22px 22px 0 0;padding:1.15rem}
-  .work-modal-duo .wm-reel,
-  .work-modal-duo .wm-side{max-height:42svh}
+  .work-modal-duo{grid-template-columns:1fr;gap:10px}
+  .work-modal-duo .wm-reel{
+    aspect-ratio:9/14;max-height:min(38svh,320px);width:100%;
+  }
+  .work-modal-duo .wm-side{
+    grid-template-rows:none;grid-template-columns:repeat(3,1fr);
+    max-height:none;gap:8px;
+  }
+  .work-modal-duo .wm-ph{aspect-ratio:1;min-height:0}
   .work-modal-body{padding:1.3rem 1.2rem 1.5rem}
   .work-modal-links{padding-top:1.4rem}
   .work-modal-close{top:.7rem;right:.7rem}
